@@ -2,7 +2,7 @@ import React from 'react'
 import { ShopLayout } from '../components/layouts'
 import { Box, Typography } from '@mui/material';
 
-const bad404 = () => {
+const Bad404 = () => {
   return (
     <ShopLayout title='pagina no encontrada' pageDescription='Nada que mostrar' > 
        <Box              
@@ -21,4 +21,4 @@ const bad404 = () => {
   )
 }
 
-export default bad404
+export default Bad404

@@ -9,7 +9,7 @@ import { ShopLayout } from '../../components/layouts/ShopLayout';
 
 
 
-const emptyPage = () => {
+const EmptyPage = () => {
     return (
         <ShopLayout title={'Carrito Vacio'} pageDescription={'No hay productos en el Carrito'} >
             <Box
@@ -36,4 +36,4 @@ const emptyPage = () => {
     )
 }
 
-export default emptyPage
+export default EmptyPage

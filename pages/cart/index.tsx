@@ -10,27 +10,25 @@ import { OrderSummary } from '../../components/cart';
 const CartPage = () => {
     return (
         <ShopLayout title='Carrito - 3' pageDescription={'Contenido del carrito de compra'}>
-            <Typography variant='h1' component='h1'>Carrito</Typography>
+            <Typography mb={5} variant='h1' component='h1'>Carrito</Typography>
             <Grid container>
                 <Grid item xs={12} sm={7}>
-                     <CartList editable/>
+                    <CartList editable />
                 </Grid>
                 <Grid item xs={12} sm={5}>
-                   <Card className='summary-card'>
-                     <CardContent>
-                        <Typography variant='h2'>Su pedido</Typography>  
-                        <Divider sx={{ my: 1 }} />
-                                                    
-                        <OrderSummary/>  
-                    <Box sx = {{ mt : 3 }}>
-                     <Button color = 'secondary' className='circular-btn' fullWidth>
-                         Confirmar
-                     </Button>
+                    <Card className='summary-card'>
+                        <CardContent>
+                            <Typography variant='h2'>Su pedido</Typography>
+                            <Divider sx={{ my: 1 }} />
 
-                    </Box>
-
-                     </CardContent>
-                   </Card>
+                            <OrderSummary />
+                            <Box sx={{ mt: 3 }}>
+                                <Button color='secondary' className='circular-btn' fullWidth>
+                                    Confirmar
+                                </Button>
+                            </Box>
+                        </CardContent>
+                    </Card>
                 </Grid>
             </Grid>
         </ShopLayout>
