@@ -23,11 +23,7 @@ export const ShopLayout:FC<PropsWithChildren<Props>> = ({children, title, pageDe
         <meta name='og:image' content={imageFullUrl} />
         )
       }
-
-
-
       </Head>
-
 
       <nav>
         <Navbar />
@@ -39,7 +35,8 @@ export const ShopLayout:FC<PropsWithChildren<Props>> = ({children, title, pageDe
       <main style={{
         margin: ' 80px auto',
         maxWidth: '1440px',
-        padding: '0px 30px'
+        padding: '0px 30px',
+        
 
       }}>
         {children}

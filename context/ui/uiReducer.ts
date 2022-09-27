@@ -1,0 +1,21 @@
+ 
+ import { UiState } from './UiProvider';
+ 
+ 
+ type UiActionType =
+  |{type:'[UI] - ToggleMenu'}
+ 
+ 
+ 
+ export const uiReducer = (state: UiState, action: any ):UiState =>{
+       switch (action.type){
+         case '[UI] - ToggleMenu':
+           return{
+            ...state,
+            isMenuOpen: !state.isMenuOpen
+            }
+          default:
+             return state;
+        }
+ 
+     }
