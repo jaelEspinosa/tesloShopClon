@@ -1,8 +1,8 @@
-import React, { useContext } from 'react'
+import React, { useContext, useState } from 'react'
 import NextLink from 'next/link'
 import { useRouter } from 'next/router';
-import { AppBar, Badge, Box, Button, IconButton, Link, Toolbar, Typography } from '@mui/material';
-import { SearchOutlined, ShoppingCartOutlined } from '@mui/icons-material'
+import { AppBar, Badge, Box, Button, IconButton, Input, InputAdornment, Link, Toolbar, Typography } from '@mui/material';
+import { ClearOutlined, SearchOutlined, ShoppingCartOutlined } from '@mui/icons-material'
 
 import { UiContext } from '../../context';
 
@@ -10,7 +10,24 @@ import { UiContext } from '../../context';
 
 export const Navbar = () => {
   const router = useRouter()
-  const {toggleSideMenu} = useContext(UiContext)
+  const [searchTerm, setSearchTerm] = useState('');
+  const [showSearch, setShowSearch] = useState(false)
+
+  const onSearchTerm = () => {
+
+    if (searchTerm.trim().length === 0) return;
+
+    navigateTo(`/search/${searchTerm}`)
+    /* setSearchTerm('') */
+
+  }
+
+  const navigateTo = (url: string) => {
+    router.push(url)
+
+  }
+
+  const { toggleSideMenu } = useContext(UiContext)
   return (
     <AppBar>
       <Toolbar>
@@ -23,31 +40,91 @@ export const Navbar = () => {
 
         <Box flex={1} />
 
-        <Box sx={{ display: {xs:'none', sm:'block'}}}>
+        {!showSearch &&
 
-          <NextLink href={'/category/men'} passHref >
-            <Link>
-              <Button color={router.pathname ==='/category/men' ? 'primary': 'info'}
-              >Hombres</Button>
-            </Link>
-          </NextLink>
-          <NextLink href={'/category/women'} passHref >
-            <Link>
-              <Button color={router.pathname ==='/category/women' ? 'primary': 'info'}           
-              >Mujeres</Button>
-            </Link>
-          </NextLink>
-          <NextLink href={'/category/kid'} passHref >
-            <Link>
-              <Button color={router.pathname ==='/category/kid' ? 'primary': 'info'}
-              >Niños</Button>
-            </Link>
-          </NextLink>
-        </Box>
+          <Box sx={{ display: { xs: 'none', sm: 'block' } }}>
+
+            <NextLink href={'/category/men'} passHref >
+              <Link>
+                <Button color={router.pathname === '/category/men' ? 'primary' : 'info'}
+                >Hombres</Button>
+              </Link>
+            </NextLink>
+            <NextLink href={'/category/women'} passHref >
+              <Link>
+                <Button color={router.pathname === '/category/women' ? 'primary' : 'info'}
+                >Mujeres</Button>
+              </Link>
+            </NextLink>
+            <NextLink href={'/category/kid'} passHref >
+              <Link>
+                <Button color={router.pathname === '/category/kid' ? 'primary' : 'info'}
+                >Niños</Button>
+              </Link>
+            </NextLink>
+          </Box>
+        }
+
 
         <Box flex={1} />
 
-        <IconButton>
+        {/* Pantallas grandes */}
+
+
+
+        {!showSearch &&
+          <IconButton
+            className='fadeIn'
+            sx={{
+              display: { xs: 'none', sm: 'flex' }
+            }}
+            onClick={() => {
+              setShowSearch(!showSearch)
+              
+            }}
+
+          >
+            <SearchOutlined />
+          </IconButton>}
+
+        {showSearch &&
+
+          <Input  
+          sx={{ display: { xs: 'none', sm: 'flex' } }}        
+            className='fadeIn'
+            autoFocus
+            value={searchTerm}
+            onChange={e => setSearchTerm(e.target.value)}
+            onKeyDown={e => e.key === 'Enter' ? onSearchTerm() : null}
+            onKeyUp={e => e.key === 'Enter' ? setShowSearch(!showSearch) : null}
+            type='text'
+            placeholder="Buscar..."
+            endAdornment={
+              <InputAdornment position="end">
+                <IconButton
+                  onClick={() => {
+                    setShowSearch(false)
+                    setSearchTerm('')
+                  }}
+                  aria-label="toggle password visibility"
+                >
+                  <ClearOutlined />
+                </IconButton>
+              </InputAdornment>
+            }
+
+          />
+        }
+
+
+        {/*Pantallas pequeñas  */}
+
+        <IconButton
+          sx={{
+            display: { xs: 'flex', sm: 'none' }
+          }}
+          onClick={toggleSideMenu}
+        >
           <SearchOutlined />
         </IconButton>
 

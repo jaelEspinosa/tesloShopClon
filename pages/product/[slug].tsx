@@ -67,7 +67,7 @@ const ProductPage:NextPage<Props> = ({product}) => {
 // - Only if you need to pre-render a page whose data must be fetched at request time
 
 
-export const getServerSideProps: GetServerSideProps = async ({params}) => {
+/* export const getServerSideProps: GetServerSideProps = async ({params}) => {
  
   const { slug } = params as {slug: string}
 
@@ -87,6 +87,48 @@ export const getServerSideProps: GetServerSideProps = async ({params}) => {
     props: {
       product
     }
+  }
+} */
+
+// You should use getStaticPaths if you’re statically pre-rendering pages that use dynamic routes
+import { GetStaticPaths } from 'next'
+
+export const getStaticPaths: GetStaticPaths = async (ctx) => {
+
+  const  productSlugs  = await dbProducts.getAllProductsSlugs()   
+
+
+  return {
+    paths: productSlugs.map(obj =>({
+      params:{
+        slug: obj.slug
+      }
+    })),
+    fallback: "blocking"
+  }
+}
+
+
+import { GetStaticProps } from 'next'
+
+export const getStaticProps: GetStaticProps = async ({params}) => {
+  const { slug = '' } = params as {slug: string}
+
+  const product = await dbProducts.getProductBySlug(slug)
+
+if (!product){
+  return{
+    redirect:{
+      destination:'/404',
+      permanent:false
+    }
+  }
+}
+  return {
+    props: {
+      product
+    },
+    revalidate:86400,
   }
 }
 
