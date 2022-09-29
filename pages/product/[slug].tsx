@@ -1,17 +1,24 @@
-import { GetServerSideProps, NextPage } from 'next'
-import { Box, Button, Grid, Typography } from '@mui/material';
-import React from 'react'
+import { useState, useContext } from 'react';
+import {  NextPage, GetStaticProps, GetStaticPaths } from 'next'
+import { useRouter } from 'next/router';
+
+import { Box, Button, Chip, Grid, Typography } from '@mui/material';
+
 import { ShopLayout } from '../../components/layouts/ShopLayout';
-import { ProductSlideshow } from '../../components/products';
-import { ItemCounter } from '../../components/ui';
+import { ProductSlideshow, SizeSelector } from '../../components/products';
 
-import { SizeSelector } from '../../components/products/SizeSelector';
-import { IProduct } from '../../interfaces';
-import Product from '../../models/Product';
+
+
+import { ICartProduct, IProduct, ISize } from '../../interfaces';
+
 import { dbProducts } from '../../database';
+import { ItemCounter } from '../../components/ui';
+import { CartContext } from '../../context/cart/CartContext';
 
 
-// const product = initialData.products[0] // esto es provisional datos dummy
+
+
+
 
 interface Props {
   product: IProduct
@@ -19,6 +26,48 @@ interface Props {
 
 
 const ProductPage:NextPage<Props> = ({product}) => {
+
+ const [ tempCartProduct, setTemCartProduct ] = useState<ICartProduct>({
+    _id:product._id,
+    image: product.images[0],
+    price: product.price,
+    size: undefined,
+    slug: product.slug,
+    title: product.title,
+    gender: product.gender,
+    quantity: 1
+
+
+ })
+  const router = useRouter()
+  const {addProductToCart} = useContext(CartContext)
+  
+  const selectedSize = (size : ISize ) =>{
+    setTemCartProduct({
+      ...tempCartProduct,
+      size
+    })
+  }  
+  
+  const onUpdatedQuantity = (quantity : number ) =>{
+    setTemCartProduct({
+      ...tempCartProduct,
+      quantity
+    })
+  }
+
+ const onAddProduct = ()=>{
+  if(!tempCartProduct.size) {return;}
+  
+  
+  //TODO: llamar a la accion del contex para agregar al carrio
+  
+  addProductToCart(tempCartProduct)
+  router.push('/cart')
+ }
+ 
+ 
+  
   return (
     <ShopLayout title={product.title} pageDescription={product.description}>
     
@@ -37,12 +86,40 @@ const ProductPage:NextPage<Props> = ({product}) => {
        {/* Cantidad */}
        <Box sx={{my: 2 }}>
        <Typography variant='subtitle2' component='h2'>Cantidad</Typography>
-        <ItemCounter />
-        <SizeSelector  sizes={product.sizes} />  
+        <ItemCounter
+            currentValue = {tempCartProduct.quantity}
+            maxValue = {product.inStock > 5 ? 5 : product.inStock}
+            updatedQuantity = {onUpdatedQuantity} 
+          />
+
+
+        <SizeSelector  
+                sizes={product.sizes} 
+                selectedSize = {tempCartProduct.size} 
+                onSelectedSize={selectedSize} 
+            />  
        </Box>
        {/* Agregar al Carrito */}
+       {
+      product.inStock > 0 ?(
+          <Button 
+               color='secondary' 
+               className='circular-btn'
+               onClick={onAddProduct}               
+               disabled = {!tempCartProduct.size}
+               >
+          
+            {
+              tempCartProduct.size
+             ?'Agregar a la cesta ' 
+             :'Selecione una talla' 
+            }
 
-       <Button color='secondary' className='circular-btn'>Agregar a la cesta</Button>
+            </Button>
+        ):(
+          <Chip label = 'No hay Stock suficiente' color = 'error' variant = 'outlined'/>
+        )
+       }
 
        {/* <Chip label='No hay Stock suficiente' color='error' variant='outlined'/> */}
 
@@ -91,7 +168,7 @@ const ProductPage:NextPage<Props> = ({product}) => {
 } */
 
 // You should use getStaticPaths if you’re statically pre-rendering pages that use dynamic routes
-import { GetStaticPaths } from 'next'
+
 
 export const getStaticPaths: GetStaticPaths = async (ctx) => {
 
@@ -109,7 +186,7 @@ export const getStaticPaths: GetStaticPaths = async (ctx) => {
 }
 
 
-import { GetStaticProps } from 'next'
+
 
 export const getStaticProps: GetStaticProps = async ({params}) => {
   const { slug = '' } = params as {slug: string}
@@ -133,3 +210,4 @@ if (!product){
 }
 
 export default ProductPage
+
