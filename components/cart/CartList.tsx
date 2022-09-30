@@ -1,37 +1,46 @@
 
 
-import { Grid, Link, Typography, CardActionArea, CardMedia, Box, Button } from '@mui/material';
 import { FC, useContext } from 'react';
-/* import { initialData } from '../../database/products' */
+import { useRouter } from 'next/router';
 import NextLink from 'next/link'
+
+
+import { Grid, Link, Typography, CardActionArea, CardMedia, Box, Button } from '@mui/material';
 import { ItemCounter } from '../ui';
 import DeleteOutlineOutlinedIcon from '@mui/icons-material/DeleteOutlineOutlined';
+
 import { CartContext } from '../../context/cart/CartContext';
 import { ICartProduct } from '../../interfaces';
 
-/* const productsInCart = [
-    initialData.products[0],  // datos provisionales en duro 
-    initialData.products[1],  // datos provisionales en duro 
-    initialData.products[4],
-    initialData.products[8]  // datos provisionales en duro 
-] */
 
 interface Props {
     editable?: boolean;
 }
 
 export const CartList:FC<Props> = ({editable = false}) => {
-    const {cart, uptateCartQuantity} = useContext(CartContext)
+    
+    const router = useRouter()
 
+    const {cart, uptateCartQuantity, removeCartProduct, numberOfItems} = useContext(CartContext)
+    
+    if(numberOfItems === 0){ 
+       router.push('/cart/empty')
+    }
     const onNewCartQuantityValue = (product: ICartProduct, newQuantityValue: number)=>{
         product.quantity = newQuantityValue;
         uptateCartQuantity( product )
     }
+    const deleteItem = (product: ICartProduct)=>{
+        removeCartProduct(product)
+       
+    }
    
     return (
         <>
+            
             {
                 cart.map(product => (
+                    
                     <Grid container spacing={2} key={product.slug+product.size} sx={{ mb: 2 }}>
                         <Grid item xs={3}>
                             {/* //TODO llevar a la pagina del producto  */}
@@ -48,7 +57,7 @@ export const CartList:FC<Props> = ({editable = false}) => {
                             </NextLink>
 
                         </Grid>
-                        <Grid item xs={7}>
+                        <Grid item xs={6}>
                             <Box display='flex' flexDirection='column'>
                                 <Typography variant='body1'>{product.title}</Typography>
                                 <Typography variant='body1'>Talla: <strong>{product.size}</strong></Typography>
@@ -58,19 +67,20 @@ export const CartList:FC<Props> = ({editable = false}) => {
                                               maxValue={5} 
                                               updatedQuantity={(value) => onNewCartQuantityValue(product, value)}
                                               /> :
-                                <Typography variant='subtitle1'>{product.quantity}{product.quantity > 1 ? 'Productos' : 'Producto'}</Typography>
+                                <Typography variant='subtitle1'>{product.quantity}{product.quantity > 1 ? ' Productos' : ' Producto'}</Typography>
 
                             }
                                 
                             </Box>
                         </Grid>
-                        <Grid item xs={2} display='flex' alignItems='center' flexDirection='column'>
+                        <Grid item xs={3} display='flex' alignItems='center' flexDirection='column'>
                             <Typography variant='subtitle1'>{product.price} €</Typography>
                             {
                                 editable && 
                             <Button
                                 variant='text'
                                 color='primary'
+                                onClick={()=>deleteItem(product)}
                             >
                              <DeleteOutlineOutlinedIcon />   
 
@@ -78,6 +88,7 @@ export const CartList:FC<Props> = ({editable = false}) => {
                             }
                         </Grid>
                     </Grid>
+                        
                 ))
             }
         </>

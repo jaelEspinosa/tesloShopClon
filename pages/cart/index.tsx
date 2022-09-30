@@ -6,8 +6,10 @@ import React from 'react'
 import { CartList } from '../../components/cart';
 import { ShopLayout } from '../../components/layouts/ShopLayout';
 import { OrderSummary } from '../../components/cart';
+import { useRouter } from 'next/router';
 
 const CartPage = () => {
+    const router = useRouter()
     return (
         <ShopLayout title='Carrito - 3' pageDescription={'Contenido del carrito de compra'}>
             <Typography mb={5} variant='h1' component='h1'>Carrito</Typography>
@@ -23,8 +25,11 @@ const CartPage = () => {
 
                             <OrderSummary />
                             <Box sx={{ mt: 3 }}>
-                                <Button color='secondary' className='circular-btn' fullWidth>
+                                <Button 
+                                onClick={()=>router.push('./checkout/summary')}
+                                color='secondary' className='circular-btn' fullWidth>
                                     Confirmar
+                                 
                                 </Button>
                             </Box>
                         </CardContent>

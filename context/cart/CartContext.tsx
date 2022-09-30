@@ -4,11 +4,16 @@ import { ICartProduct } from '../../interfaces';
 
 interface contextProps{
     cart : ICartProduct[];
+    numberOfItems: number;
+    subTotal: number;
+    iva: number;
+    total: number;
 
     //methods
     
     addProductToCart: (product: ICartProduct) => void;
     uptateCartQuantity: (product: ICartProduct) => void;
+    removeCartProduct: (product: ICartProduct) => void;
 }
 
 
