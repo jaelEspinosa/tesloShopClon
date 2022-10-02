@@ -130,7 +130,7 @@ export const Navbar = () => {
           <SearchOutlined />
         </IconButton>
 
-        <NextLink href='/cart' passHref>
+        <NextLink href={numberOfItems > 0 ? '/cart' : '/cart/empty'} passHref>
           <Link>
             <IconButton>
               <Badge badgeContent={numberOfItems > 0 ? (numberOfItems > 9 ? '+9' : numberOfItems) : null} color='secondary'>
