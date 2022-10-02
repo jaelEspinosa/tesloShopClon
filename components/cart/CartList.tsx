@@ -1,7 +1,7 @@
 
 
 import { FC, useContext } from 'react';
-import { useRouter } from 'next/router';
+
 import NextLink from 'next/link'
 
 
@@ -19,13 +19,11 @@ interface Props {
 
 export const CartList:FC<Props> = ({editable = false}) => {
     
-    const router = useRouter()
+    
 
     const {cart, uptateCartQuantity, removeCartProduct, numberOfItems} = useContext(CartContext)
     
-    if(numberOfItems === 0){ 
-       router.push('/cart/empty')
-    }
+    
     const onNewCartQuantityValue = (product: ICartProduct, newQuantityValue: number)=>{
         product.quantity = newQuantityValue;
         uptateCartQuantity( product )

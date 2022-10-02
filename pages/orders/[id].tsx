@@ -2,9 +2,9 @@ import NextLink from 'next/link'
 import { Card, CardContent, Divider, Grid, Link, Typography, Box, Chip } from '@mui/material';
 import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
 
-import { CartList } from '../../components/cart';
+import { CartList, OrderSummary } from '../../components/cart';
 import { ShopLayout } from '../../components/layouts/ShopLayout';
-import { OrderSummary } from '../../components/cart';
+
 import { CreditCardOffOutlined, CreditScoreOutlined } from '@mui/icons-material';
 
 

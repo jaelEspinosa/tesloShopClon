@@ -6,7 +6,7 @@ import { PropsWithChildren } from 'react';
 import { ICartProduct } from '../../interfaces';
 
 import Cookie from 'js-cookie'
-import { stat } from 'fs/promises';
+
 import { CurrencyYenTwoTone } from '@mui/icons-material';
 
 
@@ -66,7 +66,7 @@ export const CartProvider:FC<PropsWithChildren> = ({children}) => {
      }
      dispatch({type:'[Cart] - Update order summary', payload: orderSummary})
       
-     console.log(orderSummary)
+     
 
      },[state.cart])
 

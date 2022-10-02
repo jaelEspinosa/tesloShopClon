@@ -2,9 +2,9 @@ import NextLink from 'next/link'
 import { Button, Card, CardContent, Divider, Grid, Link, Typography, Box } from '@mui/material';
 import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
 
-import { CartList } from '../../components/cart';
+
 import { ShopLayout } from '../../components/layouts/ShopLayout';
-import { OrderSummary } from '../../components/cart';
+import { OrderSummary, CartList  } from '../../components/cart';
 
 
 const SummaryPage = () => {
