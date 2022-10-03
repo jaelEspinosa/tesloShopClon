@@ -6,7 +6,7 @@ import { db } from '../../../database'
 import { User } from '../../../models'
 import bcrypt from 'bcryptjs';
 import {jwt} from '../../../utilities';
-import { signToken } from '../../../utilities/jwt';
+
 
 
 type Data = 

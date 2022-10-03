@@ -41,7 +41,7 @@ export const CartList:FC<Props> = ({editable = false}) => {
                     
                     <Grid container spacing={2} key={product.slug+product.size} sx={{ mb: 2 }}>
                         <Grid item xs={3}>
-                            {/* //TODO llevar a la pagina del producto  */}
+                          
                             <NextLink href={`/product/${product.slug}`} passHref>
                                 <Link>
                                     <CardActionArea sx={{ borderRadius: 8 }}>
