@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useContext } from 'react';
 import NextLink from 'next/link'
 
 import { useForm } from 'react-hook-form'
@@ -7,9 +7,12 @@ import { Box, Button, Grid, Link, TextField, Typography, Chip } from '@mui/mater
 
 
 import AuthLayout from '../../components/layouts/AuthLayout'
+import { useRouter } from 'next/router';
 import { validations } from '../../utilities'
-import { tesloApi } from '../../api'
+
+import CheckCircleOutlineOutlinedIcon from '@mui/icons-material/CheckCircleOutlineOutlined';
 import { ErrorOutline } from '@mui/icons-material'
+import { AuthContext } from '../../context';
 
 
 type FormData = {
@@ -21,23 +24,27 @@ type FormData = {
 
 
 const RegisterPage = () => {
+   const router = useRouter()
+   const {registerUser} = useContext(AuthContext)
    const [errorRegister, setErrorRegister] = useState(false)
+   const [errorRegisterMessage, setErrorRegisterMessage] = useState('')
    const { register, handleSubmit, formState: { errors } } = useForm<FormData>();
 
-   const onRegisterUser = async ({ email, name, password }: FormData) => {
-
-      try {
-
-         const { data } = await tesloApi.post('/user/register', { email, name, password })
-         const { token, user } = data
-         console.log(token, user)
-
-      } catch (error) {
-
-         setErrorRegister(true)
-         setTimeout(() => { setErrorRegister(false) }, 2000);
+   const onRegisterUser = async ({name, email, password }: FormData) => {      
+      
+         const {hasError, message} = await registerUser( name, email, password)
+         
+      if(hasError){
+         setErrorRegister(true);
+         setErrorRegisterMessage(message!)
+         setTimeout(() => { setErrorRegister( false ), setErrorRegisterMessage('') }, 2000);
+         return
+      }else{
+         setErrorRegister(false)
+         setErrorRegisterMessage('Iniciando sesión..')
+         setTimeout(() => { router.replace('/') }, 2000);
+         
       }
-
 
    }
    return (
@@ -50,12 +57,13 @@ const RegisterPage = () => {
                   <Grid item xs={12}>
                      <Typography sx={{ textAlign: 'center', mb: '25px' }} variant='h1' component='h1'>Nuevo Usuario</Typography>
                      <Chip
-                        label='Email ya registrado'
-                        color='error'
-                        icon={<ErrorOutline />}
+                        label={errorRegisterMessage}
+                        color={errorRegister ? 'error' : 'secondary'}
+                        icon={errorRegister ? <ErrorOutline /> : <CheckCircleOutlineOutlinedIcon/> }
                         className='fadeIn'
-                        sx={{ display: !errorRegister ? 'none' : 'flex' }}
+                        sx={{ display: errorRegisterMessage === '' ? 'none' : 'flex' }}
                      />
+                    
                   </Grid>
                   <Grid item xs={12}>
                      <TextField

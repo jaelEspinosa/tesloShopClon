@@ -3,15 +3,18 @@ import NextLink from 'next/link'
 import { useRouter } from 'next/router';
 import { AppBar, Badge, Box, Button, IconButton, Input, InputAdornment, Link, Toolbar, Typography } from '@mui/material';
 import { ClearOutlined, SearchOutlined, ShoppingCartOutlined } from '@mui/icons-material'
+import AccountCircleOutlinedIcon from '@mui/icons-material/AccountCircleOutlined';
 
 import { UiContext, CartContext } from '../../context';
+import { AuthContext } from '../../context/auth/AuthContext';
 
 
 
 
 export const Navbar = () => {
   const router = useRouter()
-  const {numberOfItems}= useContext(CartContext)
+  const { user, isLoggedIn } = useContext(AuthContext)
+  const { numberOfItems } = useContext(CartContext)
   const [searchTerm, setSearchTerm] = useState('');
   const [showSearch, setShowSearch] = useState(false)
 
@@ -45,7 +48,12 @@ export const Navbar = () => {
         {!showSearch &&
 
           <Box sx={{ display: { xs: 'none', sm: 'block' } }}>
-
+            {isLoggedIn && 
+                <Typography color='secondary' sx={{ fontSize: '14px', textAlign: 'center', display:'flex', alignItems:'center', justifyContent:'flex-start'}}>
+                <AccountCircleOutlinedIcon />
+                {user?.name}
+              </Typography>
+            }
             <NextLink href={'/category/men'} passHref >
               <Link>
                 <Button color={router.pathname === '/category/men' ? 'primary' : 'info'}
@@ -64,6 +72,8 @@ export const Navbar = () => {
                 >Niños</Button>
               </Link>
             </NextLink>
+
+
           </Box>
         }
 
@@ -82,7 +92,7 @@ export const Navbar = () => {
             }}
             onClick={() => {
               setShowSearch(!showSearch)
-              
+
             }}
 
           >
@@ -91,8 +101,8 @@ export const Navbar = () => {
 
         {showSearch &&
 
-          <Input  
-          sx={{ display: { xs: 'none', sm: 'flex' } }}        
+          <Input
+            sx={{ display: { xs: 'none', sm: 'flex' } }}
             className='fadeIn'
             autoFocus
             value={searchTerm}
@@ -145,6 +155,7 @@ export const Navbar = () => {
         </Button>
 
       </Toolbar>
+
     </AppBar>
   )
 }
