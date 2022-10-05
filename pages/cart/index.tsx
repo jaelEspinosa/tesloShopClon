@@ -12,17 +12,19 @@ import { CartContext } from '../../context';
 
 
 const CartPage = () => {
-    const { numberOfItems} =  useContext(CartContext)
+    const { numberOfItems, isLoaded } = useContext(CartContext)
     const router = useRouter()
-    useEffect(()=>{
 
-        if (numberOfItems === 0) { 
-             router.replace('/cart/empty')
-            }
-        
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    },[])
-    
+    useEffect(() => {
+        if (isLoaded && numberOfItems === 0) {
+            router.replace('/cart/empty')
+        }
+    }, [isLoaded, numberOfItems, router])
+
+    if (!isLoaded || numberOfItems === 0) {
+        return (<></>)
+    }
+
     return (
         <ShopLayout title='Carrito - 3' pageDescription={'Contenido del carrito de compra'}>
             <Typography mb={5} variant='h1' component='h1'>Carrito</Typography>
@@ -38,11 +40,11 @@ const CartPage = () => {
 
                             <OrderSummary />
                             <Box sx={{ mt: 3 }}>
-                                <Button 
-                                
-                                color='secondary' className='circular-btn' fullWidth>
+                                <Button
+
+                                    color='secondary' className='circular-btn' fullWidth>
                                     Confirmar
-                                 
+
                                 </Button>
                             </Box>
                         </CardContent>

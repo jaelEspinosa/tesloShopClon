@@ -7,9 +7,6 @@ import { useRouter } from "next/router";
 
 import AdminPanel from "./AdminPanel";
 
-
-
-
 export const SideMenu = () => {
 
     const router = useRouter()

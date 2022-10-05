@@ -30,6 +30,8 @@ const RegisterPage = () => {
    const [errorRegisterMessage, setErrorRegisterMessage] = useState('')
    const { register, handleSubmit, formState: { errors } } = useForm<FormData>();
 
+   const destination = router.query.p?.toString() || '/'
+
    const onRegisterUser = async ({name, email, password }: FormData) => {      
       
          const {hasError, message} = await registerUser( name, email, password)
@@ -42,7 +44,7 @@ const RegisterPage = () => {
       }else{
          setErrorRegister(false)
          setErrorRegisterMessage('Iniciando sesión..')
-         setTimeout(() => { router.replace('/') }, 2000);
+         setTimeout(() => { router.replace(destination) }, 1000);
          
       }
 
@@ -120,7 +122,7 @@ const RegisterPage = () => {
                      </Button>
                   </Grid>
                   <Grid item display='flex' justifyContent='end' xs={12}>
-                     <NextLink href='/auth/login' passHref>
+                     <NextLink href={`/auth/login?p=${destination}`} passHref>
                         <Link underline='always'>
                            ¿Ya tienes Cuenta?
                         </Link>

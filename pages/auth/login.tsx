@@ -38,11 +38,7 @@ const onLoginUser = async ( {email, password} : FormData) =>{
          setTimeout(() => { setErrorLogin(false) }, 2000);
          return
       }
-        
-      
-
-      //TODO: navegar a la pantalla en la que estaba el usuario
-
+ 
       
       router.replace(destination)
 }
@@ -106,7 +102,7 @@ const onLoginUser = async ( {email, password} : FormData) =>{
               </Button>
            </Grid>
            <Grid item display='flex' justifyContent='end' xs={12}>
-              <NextLink href='/auth/register' passHref>
+              <NextLink href={`/auth/register?p=${destination}`} passHref>
                 <Link underline = 'always'>
                  ¿No tienes Cuenta?
                 </Link>
