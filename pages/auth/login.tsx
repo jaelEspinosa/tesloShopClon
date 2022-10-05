@@ -20,11 +20,15 @@ type FormData = {
 const LoginPage = () => {
 
 const router = useRouter();
+const destination = router.query.p?.toString() || '/'
 
-const { loginUser } = useContext(AuthContext)   
+const { loginUser, isLoggedIn } = useContext(AuthContext)   
 const [errorLogin, setErrorLogin] = useState(false)
 const { register, handleSubmit, formState: { errors } } = useForm<FormData>();
 
+if(isLoggedIn){
+   router.replace(destination)
+}
 const onLoginUser = async ( {email, password} : FormData) =>{
       
       const isValidLogin = await loginUser( email, password )
@@ -35,12 +39,15 @@ const onLoginUser = async ( {email, password} : FormData) =>{
          return
       }
         
-     
+      
 
       //TODO: navegar a la pantalla en la que estaba el usuario
-      router.replace('/')
+
+      
+      router.replace(destination)
 }
-  
+   
+   
   return (
     <AuthLayout title={'Login'}>
     <form onSubmit={handleSubmit(onLoginUser)} noValidate>

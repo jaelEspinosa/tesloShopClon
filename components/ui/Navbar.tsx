@@ -5,8 +5,8 @@ import { AppBar, Badge, Box, Button, IconButton, Input, InputAdornment, Link, To
 import { ClearOutlined, SearchOutlined, ShoppingCartOutlined } from '@mui/icons-material'
 import AccountCircleOutlinedIcon from '@mui/icons-material/AccountCircleOutlined';
 
-import { UiContext, CartContext } from '../../context';
-import { AuthContext } from '../../context/auth/AuthContext';
+import { UiContext, CartContext, AuthContext } from '../../context';
+
 
 
 
@@ -37,7 +37,7 @@ export const Navbar = () => {
     <AppBar>
       <Toolbar>
         <NextLink href='/' passHref>
-          <Link display='flex' alignItems='center'>
+          <Link display='flex' alignItems='center' >
             <Typography variant='h6'>Teslo | </Typography>
             <Typography sx={{ ml: 0.5 }}>Shop</Typography>
           </Link>
@@ -49,10 +49,12 @@ export const Navbar = () => {
 
           <Box sx={{ display: { xs: 'none', sm: 'block' } }}>
             {isLoggedIn && 
-                <Typography color='secondary' sx={{ fontSize: '14px', textAlign: 'center', display:'flex', alignItems:'center', justifyContent:'flex-start'}}>
+               <Box sx={{display:'flex', alignItems:'center', justifyContent:'center' }}>
+                <Typography color='secondary' sx={{ fontSize: '14px' , display:'flex', alignItems:'flex-end'}}>
                 <AccountCircleOutlinedIcon />
                 {user?.name}
               </Typography>
+               </Box>
             }
             <NextLink href={'/category/men'} passHref >
               <Link>

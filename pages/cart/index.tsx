@@ -1,14 +1,28 @@
 
 
 import { Box, Button, Card, CardContent, Divider, Grid, Typography } from '@mui/material';
+import { useRouter } from 'next/router';
+import { useContext, useEffect } from 'react';
 
 import { CartList, OrderSummary } from '../../components/cart';
 import { ShopLayout } from '../../components/layouts/ShopLayout';
+import { CartContext } from '../../context';
+
 
 
 
 const CartPage = () => {
-   
+    const { numberOfItems} =  useContext(CartContext)
+    const router = useRouter()
+    useEffect(()=>{
+
+        if (numberOfItems === 0) { 
+             router.replace('/cart/empty')
+            }
+        
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    },[])
+    
     return (
         <ShopLayout title='Carrito - 3' pageDescription={'Contenido del carrito de compra'}>
             <Typography mb={5} variant='h1' component='h1'>Carrito</Typography>

@@ -11,8 +11,8 @@ interface contextProps{
 
     // methods
 
-    loginUser: (email: string, password: string) => Promise<boolean>
-    
+    loginUser: (email: string, password: string) => Promise<boolean>;
+    logout: () => void;
 }
 
 

@@ -5,12 +5,13 @@ import { FC, useContext } from 'react';
 import NextLink from 'next/link'
 
 
+
 import { Grid, Link, Typography, CardActionArea, CardMedia, Box, Button } from '@mui/material';
-import { ItemCounter } from '../ui';
 import DeleteOutlineOutlinedIcon from '@mui/icons-material/DeleteOutlineOutlined';
 
-import { CartContext } from '../../context/cart/CartContext';
+import { CartContext } from '../../context';
 import { ICartProduct } from '../../interfaces';
+import { ItemCounter } from '../ui';
 
 
 interface Props {
@@ -22,6 +23,7 @@ export const CartList:FC<Props> = ({editable = false}) => {
     
 
     const {cart, uptateCartQuantity, removeCartProduct, numberOfItems} = useContext(CartContext)
+    
     
     
     const onNewCartQuantityValue = (product: ICartProduct, newQuantityValue: number)=>{
