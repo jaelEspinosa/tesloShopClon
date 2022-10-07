@@ -11,6 +11,8 @@ import Cookie from 'js-cookie'
 
 
 
+
+
 export interface CartState {
    isLoaded: boolean;
    cart: ICartProduct[];
@@ -18,7 +20,21 @@ export interface CartState {
    subTotal: number;
    iva: number;
    total: number;
+   shippingAddress?: ShippingAddress;
 }
+
+export interface ShippingAddress {
+  
+  firstName   : string;
+  lastName    : string;
+  address     : string;
+  address2?   : string;
+  zip         : string;
+  city        : string;
+  country     : string;
+  phone       : string;
+}
+
 
 
 const CART_INITIAL_STATE : CartState ={
@@ -28,6 +44,8 @@ const CART_INITIAL_STATE : CartState ={
     subTotal: 0,
     iva: 0,
     total: 0,
+    shippingAddress: undefined
+    
 }
 
 
@@ -72,8 +90,39 @@ export const CartProvider:FC<PropsWithChildren> = ({children}) => {
 
      },[state.cart])
 
+     useEffect(()=>{
+      if (Cookie.get('firstName')){
 
+        const shippingAddress ={
+         firstName :   Cookie.get('firstName') || '',
+         lastName  :   Cookie.get('lastName') || '',
+         address   :   Cookie.get('address') || '',
+         address2  :   Cookie.get('address2') || '',
+         zip       :   Cookie.get('zip') || '',
+         city      :   Cookie.get('city') || '',
+         country   :   Cookie.get('country') || '',
+         phone     :   Cookie.get('phone') || ''
+        }
+   
+         dispatch({type:'[Cart] - LoadAddress From cookies', payload: shippingAddress })
+      }
+
+
+     },[])
      
+     const UpdateAddress = (address : ShippingAddress) =>{
+      Cookie.set( 'firstName',address.firstName)
+      Cookie.set( 'lastName',address.lastName)
+      Cookie.set( 'address',address.address)
+      Cookie.set( 'address2',address.address2 || '')
+      Cookie.set( 'zip',address.zip)
+      Cookie.set( 'city',address.city)
+      Cookie.set( 'country',address.country)
+      Cookie.set( 'phone',address.phone)
+  
+        dispatch({type:'[Cart] - Update Address', payload: address })
+
+     }
      
      const addProductToCart  = (product: ICartProduct) =>{     
       
@@ -131,6 +180,7 @@ export const CartProvider:FC<PropsWithChildren> = ({children}) => {
          addProductToCart,
          removeCartProduct,
          uptateCartQuantity,
+         UpdateAddress,
       }}>
         {children}
       </CartContext.Provider>
