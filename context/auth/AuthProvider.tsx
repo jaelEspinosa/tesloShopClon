@@ -1,7 +1,8 @@
 import React, { FC, useReducer, useEffect, PropsWithChildren } from 'react';
+import { useSession, signOut } from 'next-auth/react';
 
 import axios from 'axios';
-import  router  from 'next/router';
+
 
 import Cookies from 'js-cookie';
 
@@ -10,6 +11,8 @@ import { authReducer } from './authReducer';
 
 import { IUser } from '../../interfaces';
 import { tesloApi } from '../../api';
+import { useRouter } from 'next/router';
+
 
 
 export interface AuthState {
@@ -27,17 +30,35 @@ const AUTH_INITIAL_STATE : AuthState ={
 
 export const AuthProvider:FC<PropsWithChildren> = ({children}) => {
      const [state, dispatch] = useReducer(authReducer, AUTH_INITIAL_STATE)
+     const {data, status} = useSession()
+     
+     const router = useRouter()
 
-     useEffect (()=>{
+
+    useEffect(()=>{
+      if(status === 'authenticated'){
+ 
+        
+        dispatch({type: '[Auth] - Login', payload: data?.user as IUser})
+      }
+
+    },[data, status])  
+
+
+    /*  useEffect (()=>{
      
      const token = Cookies.get('token')
      if(token){
        checkToken()
      } 
 
-     },[])
+     },[]) */
       
      const checkToken = async ()=>{
+      if(!Cookies.get('token')){
+        return
+      }
+
        try {
          const { data } = await tesloApi.get('/user/validate-token')
          const { user, token } = data
@@ -91,13 +112,21 @@ export const AuthProvider:FC<PropsWithChildren> = ({children}) => {
     }
 
     const logout = ()=>{
-      Cookies.remove('token')
-      Cookies.remove('cart')
-      
-      if (router.asPath === '/'){
+      Cookies.remove('cart');
+      Cookies.remove('firstName');
+      Cookies.remove('lastName');
+      Cookies.remove('address');
+      Cookies.remove('address2');
+      Cookies.remove('zip');
+      Cookies.remove('city');
+      Cookies.remove('country');
+      Cookies.remove('phone');
+      signOut()
+      /* Cookies.remove('token'); */
+      /* if (router.asPath === '/'){
         router.reload()
-      }
-      dispatch({type:'[Auth] - Logout'})
+      } */
+      /* dispatch({type:'[Auth] - Logout'}) */
     }
 
    return (

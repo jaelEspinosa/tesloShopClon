@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 import { Box, Divider, Drawer, IconButton, Input, InputAdornment, List, ListItem, ListItemIcon, ListItemText, ListSubheader, Typography } from "@mui/material"
 import { AccountCircleOutlined, AdminPanelSettings, CategoryOutlined, ConfirmationNumberOutlined, EscalatorWarningOutlined, FemaleOutlined, Iron, LoginOutlined, MaleOutlined, SearchOutlined, VpnKeyOutlined } from "@mui/icons-material"
 
@@ -10,7 +11,7 @@ import AdminPanel from "./AdminPanel";
 export const SideMenu = () => {
 
     const router = useRouter()
-    
+
     const { isMenuOpen, toggleSideMenu } = useContext(UiContext);
     const { user, isLoggedIn, logout } = useContext(AuthContext)
     const [searchTerm, setSearchTerm] = useState('');
@@ -32,11 +33,11 @@ export const SideMenu = () => {
     }
 
     const onLogOut = () => {
-        
+
         router.push('/')
         toggleSideMenu();
         setTimeout(() => {
-            
+
             logout()
         }, 500);
 
@@ -81,7 +82,13 @@ export const SideMenu = () => {
                         <>
                             <ListItem button>
                                 <ListItemIcon>
-                                    <AccountCircleOutlined />
+                                    {user?.image ? <img style={{
+                                        width: '35px',
+                                        borderRadius: '50px',
+                                        marginRight: '5px',
+                                    }} src={user?.image} alt='avatar'
+
+                                    /> : <AccountCircleOutlined />}
                                 </ListItemIcon>
                                 <ListItemText primary={user?.name} />
                             </ListItem>
@@ -157,7 +164,7 @@ export const SideMenu = () => {
                     {/* Admin */}
                     {user?.role === 'admin' &&
 
-                     <AdminPanel />
+                        <AdminPanel />
                     }
                 </List>
             </Box>

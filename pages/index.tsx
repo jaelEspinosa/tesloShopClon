@@ -1,4 +1,5 @@
 import type { NextPage } from 'next'
+
 import {  Typography } from '@mui/material';
 
 import { ShopLayout } from '../components/layouts';
@@ -11,7 +12,9 @@ import { FullScreenLoading } from '../components/ui';
 
 
 const HomePage: NextPage = () => {
- 
+  
+
+  
   const {products, isLoading} =  useProducts('/products')
 
   return (

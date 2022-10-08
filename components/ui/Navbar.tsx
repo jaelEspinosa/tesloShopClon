@@ -1,3 +1,5 @@
+/* eslint-disable @next/next/no-img-element */
+import { useSession } from 'next-auth/react';
 import React, { useContext, useState } from 'react'
 import NextLink from 'next/link'
 import { useRouter } from 'next/router';
@@ -12,6 +14,8 @@ import { UiContext, CartContext, AuthContext } from '../../context';
 
 
 export const Navbar = () => {
+  
+  
   const router = useRouter()
   const { user, isLoggedIn } = useContext(AuthContext)
   const { numberOfItems } = useContext(CartContext)
@@ -33,6 +37,7 @@ export const Navbar = () => {
   }
 
   const { toggleSideMenu } = useContext(UiContext)
+ 
   return (
     <AppBar>
       <Toolbar>
@@ -51,7 +56,12 @@ export const Navbar = () => {
             {isLoggedIn && 
                <Box sx={{display:'flex', alignItems:'center', justifyContent:'center' }}>
                 <Typography color='secondary' sx={{ fontSize: '14px' , display:'flex', alignItems:'flex-end'}}>
-                <AccountCircleOutlinedIcon />
+               {user?.image ? <img style={{
+                              width:'25px',
+                              borderRadius:'50px',
+                              marginRight:'5px'
+                 
+                          }} src={user?.image} alt='avatar'/> : <AccountCircleOutlinedIcon /> } 
                 {user?.name}
               </Typography>
                </Box>

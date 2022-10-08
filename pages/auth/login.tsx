@@ -1,4 +1,5 @@
-import { useState, useContext } from 'react';
+import { useState, useEffect } from 'react';
+import { GetServerSideProps } from 'next'
 import NextLink from 'next/link'
 
 import { useRouter } from 'next/router';
@@ -10,7 +11,9 @@ import { Box, Button, Chip, Grid, Link, TextField, Typography } from '@mui/mater
 
 import AuthLayout from '../../components/layouts/AuthLayout'
 import { validations } from '../../utilities'
-import { AuthContext } from '../../context';
+
+import { getSession, signIn } from 'next-auth/react';
+
 
 type FormData = {
    email : string,
@@ -20,29 +23,39 @@ type FormData = {
 const LoginPage = () => {
 
 const router = useRouter();
+const error = router.query.error
+
 const destination = router.query.p?.toString() || '/'
 
-const { loginUser, isLoggedIn } = useContext(AuthContext)   
-const [errorLogin, setErrorLogin] = useState(false)
+const [errorSignin, setErrorSignin] = useState(false)
+
 const { register, handleSubmit, formState: { errors } } = useForm<FormData>();
 
-if(isLoggedIn){
+/* if(isLoggedIn){
    router.replace(destination)
-}
-const onLoginUser = async ( {email, password} : FormData) =>{
-      
-      const isValidLogin = await loginUser( email, password )
-
+} */
+const onLoginUser = async ( {email, password} : FormData) =>{      
+   /*    const isValidLogin = await loginUser( email, password )
       if ( !isValidLogin){
          setErrorLogin(true)
          setTimeout(() => { setErrorLogin(false) }, 2000);
          return
-      }
- 
-      
-      router.replace(destination)
+      }      
+      router.replace(destination) */
+ await signIn('credentials',{ email, password })
 }
-   
+useEffect(() => {
+ if (error === 'CredentialsSignin'){
+   setErrorSignin(true)
+   setTimeout(() => {
+   setErrorSignin(false)
+      
+   }, 2000);
+ }
+
+ 
+}, [error])
+  
    
   return (
     <AuthLayout title={'Login'}>
@@ -57,7 +70,7 @@ const onLoginUser = async ( {email, password} : FormData) =>{
                  color = 'error'
                  icon ={<ErrorOutline />}
                  className='fadeIn'
-                 sx={{ display: !errorLogin ? 'none' : 'flex'}}
+                 sx={{ display: !errorSignin ? 'none' : 'flex'}}
               />
            </Grid>
            <Grid item xs={12}>
@@ -96,7 +109,7 @@ const onLoginUser = async ( {email, password} : FormData) =>{
                       size='large' 
                       color='secondary' 
                       className='circular-btn' 
-                      disabled ={errorLogin}
+                      disabled ={errorSignin}
                       >
                 Iniciar Sesión
               </Button>
@@ -115,6 +128,29 @@ const onLoginUser = async ( {email, password} : FormData) =>{
 
     </AuthLayout>
   )
+}
+
+// You should use getServerSideProps when:
+// - Only if you need to pre-render a page whose data must be fetched at request time
+
+
+export const getServerSideProps: GetServerSideProps = async ({req, query}) => {
+   const session = await getSession({ req })
+
+   const{p = '/'} = query 
+
+   if( session ) {
+     return {
+        redirect:{
+         destination: p.toString(),
+         permanent: false
+        }
+     }
+   }
+
+   return {
+      props: {}
+   }
 }
 
 export default LoginPage
