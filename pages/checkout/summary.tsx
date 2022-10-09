@@ -14,7 +14,7 @@ import { CartContext } from '../../context';
 
 const SummaryPage = () => {
   const {shippingAddress, numberOfItems} = useContext(CartContext)
-  console.log(shippingAddress)
+  
   if (!shippingAddress){
     return<></>
   }

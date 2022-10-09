@@ -1,4 +1,5 @@
-import React from 'react'
+
+import {useEffect} from 'react';
 import { GetServerSideProps } from 'next'
 import { ShopLayout } from '../../components/layouts/ShopLayout';
 import { Box, Button, FormControl, Grid, MenuItem, Select, TextField, Typography } from '@mui/material';
@@ -7,7 +8,7 @@ import { useForm } from 'react-hook-form';
 import Cookies from 'js-cookie';
 import { useRouter } from 'next/router';
 import { useContext } from 'react';
-import { CartContext } from '../../context';
+import { AuthContext, CartContext } from '../../context';
 
 
 type FormData = {
@@ -26,9 +27,19 @@ type FormData = {
 
 
 const AddressPage = () => {
+    const router = useRouter()
     const {UpdateAddress} = useContext(CartContext)
+    const {isLoggedIn} = useContext(AuthContext)
+
+    useEffect(() => {
+      if(!isLoggedIn){
+        router.replace('/auth/login?p=/checkout/address')
+      }   
+     
+    }, [isLoggedIn, router])
+
     const getAddressFromCoockies = (): FormData =>{
-        
+
         return{
             firstName: Cookies.get('firstName') || '',
             lastName: Cookies.get('lastName') || '',
@@ -46,7 +57,7 @@ const AddressPage = () => {
        defaultValues: getAddressFromCoockies()
 
     });
-    const router = useRouter()
+    
 
     const onSubmitAddress = (data : FormData ) =>{
        router.push ('/checkout/summary')
@@ -187,7 +198,7 @@ const AddressPage = () => {
 // - Only if you need to pre-render a page whose data must be fetched at request time
 
 
-export const getServerSideProps: GetServerSideProps = async ({ req }) => {
+/* export const getServerSideProps: GetServerSideProps = async ({ req }) => {
 
     const { token = '' } = req.cookies;
 
@@ -213,7 +224,7 @@ export const getServerSideProps: GetServerSideProps = async ({ req }) => {
 
         }
     }
-}
+} */
 
 
 

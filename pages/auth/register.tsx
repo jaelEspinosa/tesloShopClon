@@ -1,18 +1,20 @@
 import { useState, useContext } from 'react';
+import { getSession, signIn } from 'next-auth/react';
 import NextLink from 'next/link'
+import { GetServerSideProps } from 'next';
 
 import { useForm } from 'react-hook-form'
 
 import { Box, Button, Grid, Link, TextField, Typography, Chip } from '@mui/material'
+import CheckCircleOutlineOutlinedIcon from '@mui/icons-material/CheckCircleOutlineOutlined';
+import { ErrorOutline } from '@mui/icons-material'
 
 
 import AuthLayout from '../../components/layouts/AuthLayout'
 import { useRouter } from 'next/router';
 import { validations } from '../../utilities'
-
-import CheckCircleOutlineOutlinedIcon from '@mui/icons-material/CheckCircleOutlineOutlined';
-import { ErrorOutline } from '@mui/icons-material'
 import { AuthContext } from '../../context';
+
 
 
 type FormData = {
@@ -43,8 +45,9 @@ const RegisterPage = () => {
          return
       }else{
          setErrorRegister(false)
-         setErrorRegisterMessage('Iniciando sesión..')
-         setTimeout(() => { router.replace(destination) }, 1000);
+         /* setErrorRegisterMessage('Iniciando sesión..')
+         setTimeout(() => { router.replace(destination) }, 1000); */
+         await signIn('credentials',{email, password })
          
       }
 
@@ -135,6 +138,30 @@ const RegisterPage = () => {
 
       </AuthLayout>
    )
+}
+
+
+// You should use getServerSideProps when:
+// - Only if you need to pre-render a page whose data must be fetched at request time
+
+
+export const getServerSideProps: GetServerSideProps = async ({req, query}) => {
+   const session = await getSession({ req })
+
+   const{ p = '/' } = query 
+
+   if( session ) {
+     return {
+        redirect:{
+         destination: p.toString(),
+         permanent: false
+        }
+     }
+   }
+
+   return {
+      props: {}
+   }
 }
 
 export default RegisterPage
