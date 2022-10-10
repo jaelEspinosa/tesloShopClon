@@ -1,14 +1,15 @@
 
-import {useEffect} from 'react';
+
 import { GetServerSideProps } from 'next'
 import { ShopLayout } from '../../components/layouts/ShopLayout';
-import { Box, Button, FormControl, Grid, MenuItem, Select, TextField, Typography } from '@mui/material';
-import { countries, jwt } from '../../utilities';
+import { Box, Button, FormControl, Grid, MenuItem,  Select,  TextField, Typography } from '@mui/material';
+
 import { useForm } from 'react-hook-form';
 import Cookies from 'js-cookie';
 import { useRouter } from 'next/router';
 import { useContext } from 'react';
 import { AuthContext, CartContext } from '../../context';
+
 
 
 type FormData = {
@@ -26,17 +27,13 @@ type FormData = {
 
 
 
+
 const AddressPage = () => {
+    
     const router = useRouter()
     const {UpdateAddress} = useContext(CartContext)
     const {isLoggedIn} = useContext(AuthContext)
 
-    useEffect(() => {
-      if(!isLoggedIn){
-        router.replace('/auth/login?p=/checkout/address')
-      }   
-     
-    }, [isLoggedIn, router])
 
     const getAddressFromCoockies = (): FormData =>{
 
@@ -47,7 +44,7 @@ const AddressPage = () => {
             address2: Cookies.get('address2') || '',
             zip: Cookies.get('zip') || '',
             city: Cookies.get('city') || '',
-            country:Cookies.get('country') || countries[0].name,
+            country:Cookies.get('country') || '',
             phone: Cookies.get('phone') || ''
         }
 
@@ -58,6 +55,7 @@ const AddressPage = () => {
 
     });
     
+   
 
     const onSubmitAddress = (data : FormData ) =>{
        router.push ('/checkout/summary')
@@ -146,30 +144,32 @@ const AddressPage = () => {
 
 
                     <Grid item xs={12} sm={6}>
-                        <FormControl fullWidth>
-                            <TextField
-                               
-                                select
+                        {/* <FormControl fullWidth> */}
+                            <TextField                            
+                               // select
                                 variant='filled'
                                 label='Pais'
-                                defaultValue= {Cookies.get('country')} 
+                                fullWidth
                                 {...register('country', {
                                     required: 'Este campo es requerido',
                                     })}
-                                error={!!errors.country}   
+                                error={!!errors.country} 
+                                helperText={errors.city?.message}
                                                                                   
                                   >
-                                 
-                                {countries.map(country => (
-                                    <MenuItem
-                                     key={ country.code }
-                                     value={country.name}
-                                    >{country.name}</MenuItem>
-                                ))
-
-                                }
+                                    {/* <MenuItem
+                                     value='España'
+                                    >España</MenuItem>
+                                  <MenuItem
+                                     value='Portugal'
+                                    >Portugal</MenuItem>
+                                     <MenuItem
+                                     value='Italia'
+                                    >Italia</MenuItem> */}
+                           
+                             
                             </TextField>
-                        </FormControl>
+                        {/* </FormControl> */}
                     </Grid><Grid item xs={12} sm={6}>
                         <TextField 
                                 label='Telefono' 
@@ -225,12 +225,5 @@ const AddressPage = () => {
         }
     }
 } */
-
-
-
-
-
-
-
 
 export default AddressPage

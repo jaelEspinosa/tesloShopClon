@@ -5,15 +5,30 @@ import { Button, Card, CardContent, Divider, Grid, Link, Typography, Box } from 
 import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
 
 
+import { useRouter } from 'next/router';
+import { useContext } from 'react';
+
 import { ShopLayout } from '../../components/layouts/ShopLayout';
 import { OrderSummary, CartList  } from '../../components/cart';
 
-import { useContext } from 'react';
 import { CartContext } from '../../context';
+import Cookies from 'js-cookie';
 
 
 const SummaryPage = () => {
-  const {shippingAddress, numberOfItems} = useContext(CartContext)
+  const {shippingAddress, numberOfItems, createOrder} = useContext(CartContext)
+  const router = useRouter()
+
+  useEffect(() => {
+    if(!Cookies.get('firstName')) {
+      router.push('/checkout/address')
+    }    
+   
+  }, [router])
+
+  const onCreateOrder = ()=>{
+    createOrder()
+  }
   
   if (!shippingAddress){
     return<></>
@@ -68,7 +83,11 @@ const SummaryPage = () => {
 
               <OrderSummary />
               <Box sx={{ mt: 3 }}>
-                <Button color='secondary' className='circular-btn' fullWidth>
+                <Button 
+                    onClick={onCreateOrder}
+                    color='secondary' 
+                    className='circular-btn' 
+                    fullWidth>
                   Confirmar Orden
                 </Button>
 

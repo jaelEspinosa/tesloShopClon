@@ -1,6 +1,6 @@
 /* eslint-disable @next/next/no-img-element */
-import { Box, Divider, Drawer, IconButton, Input, InputAdornment, List, ListItem, ListItemIcon, ListItemText, ListSubheader, Typography } from "@mui/material"
-import { AccountCircleOutlined, AdminPanelSettings, CategoryOutlined, ConfirmationNumberOutlined, EscalatorWarningOutlined, FemaleOutlined, Iron, LoginOutlined, MaleOutlined, SearchOutlined, VpnKeyOutlined } from "@mui/icons-material"
+import { Box, Drawer, IconButton, Input, InputAdornment, List, ListItem, ListItemIcon, ListItemText } from "@mui/material"
+import { AccountCircleOutlined, ConfirmationNumberOutlined, EscalatorWarningOutlined, FemaleOutlined, LoginOutlined, MaleOutlined, SearchOutlined, VpnKeyOutlined } from "@mui/icons-material"
 
 import { useContext, useState } from 'react';
 import { AuthContext, UiContext } from "../../context";
@@ -86,9 +86,9 @@ export const SideMenu = () => {
                                         width: '35px',
                                         borderRadius: '50px',
                                         marginRight: '5px',
-                                    }} src={user?.image} alt='avatar'
+                                    }} src={user?.image} alt=''
 
-                                    /> : <AccountCircleOutlined />}
+                                    /> || <AccountCircleOutlined /> : <AccountCircleOutlined />}
                                 </ListItemIcon>
                                 <ListItemText primary={user?.name} />
                             </ListItem>

@@ -61,7 +61,7 @@ export const Navbar = () => {
                               borderRadius:'50px',
                               marginRight:'5px'
                  
-                          }} src={user?.image} alt='avatar'/> : <AccountCircleOutlinedIcon /> } 
+                          }} src={user?.image} alt=''/>  || <AccountCircleOutlinedIcon />  : <AccountCircleOutlinedIcon /> } 
                 {user?.name}
               </Typography>
                </Box>

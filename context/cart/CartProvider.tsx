@@ -3,9 +3,10 @@ import React, { FC, useEffect, useReducer } from 'react';
 import { CartContext } from './CartContext';
 import { cartReducer } from './cartReducer';
 import { PropsWithChildren } from 'react';
-import { ICartProduct } from '../../interfaces';
+import { ICartProduct, ShippingAddress } from '../../interfaces';
 
 import Cookie from 'js-cookie'
+import tesloApi from '../../api/tesloApi';
 
 
 
@@ -23,17 +24,7 @@ export interface CartState {
    shippingAddress?: ShippingAddress;
 }
 
-export interface ShippingAddress {
-  
-  firstName   : string;
-  lastName    : string;
-  address     : string;
-  address2?   : string;
-  zip         : string;
-  city        : string;
-  country     : string;
-  phone       : string;
-}
+
 
 
 
@@ -168,6 +159,22 @@ export const CartProvider:FC<PropsWithChildren> = ({children}) => {
     return dispatch ({type: '[Cart] - Remove product in cart', payload: updatedCartProducts})
   }
  
+  const createOrder = async ()=>{
+   
+    try {
+      
+      const{ data } = await tesloApi.post('/orders')
+
+      console.log({ data })
+
+    } catch (error) {
+
+      console.log(error);
+      
+    }
+
+
+  }
 
    return (
    
@@ -181,6 +188,7 @@ export const CartProvider:FC<PropsWithChildren> = ({children}) => {
          removeCartProduct,
          uptateCartQuantity,
          UpdateAddress,
+         createOrder,
       }}>
         {children}
       </CartContext.Provider>
