@@ -44,9 +44,7 @@ const registerUser = async (req: NextApiRequest, res: NextApiResponse<Data>) =>{
     if(name.length < 2) {
         return res.status(400).json({message:'El nombre debe contener al menos 2 caracteres'})  
     }
-    
-    
-
+   
     if (!validations.isValidEmail(email)){
         return res.status(400).json({message:'El correo no es válido'})
     }
@@ -67,7 +65,6 @@ const registerUser = async (req: NextApiRequest, res: NextApiResponse<Data>) =>{
     name
    })
 
-    
     try {
        await newUser.save({ validateBeforeSave:true })  
 
@@ -78,8 +75,6 @@ const registerUser = async (req: NextApiRequest, res: NextApiResponse<Data>) =>{
       }
       return res.status(500).json({message:'Ver logs del servidor'})
     }
-   
-
    
     const { _id, role } = newUser;
     const token = jwt.signToken(_id, email)

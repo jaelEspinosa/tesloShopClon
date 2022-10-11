@@ -1,12 +1,13 @@
-import { IUser } from "./user";
+import { ISize, IUser } from "./";
+
 
 
 export interface IOrder{
     _id?            : string;
     user?           : IUser | string;
     orderItems      : IOrderItem[];
-    shippingaddress : ShippingAddress;
-    paymentResult   : string;
+    shippingAddress : ShippingAddress;
+    paymentResult?   : string;
 
 
     numberOfItems   : number;
@@ -24,11 +25,11 @@ export interface IOrder{
 export interface IOrderItem{
     _id         : string;
     title       : string;
-    Size        : string;
-    quantity    : string;
+    size        : ISize;
+    quantity    : number;
     slug        : string;
     image       : string;
-    price       : string;
+    price       : number;
     gender      : string;
 
 

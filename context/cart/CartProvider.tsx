@@ -3,10 +3,11 @@ import React, { FC, useEffect, useReducer } from 'react';
 import { CartContext } from './CartContext';
 import { cartReducer } from './cartReducer';
 import { PropsWithChildren } from 'react';
-import { ICartProduct, ShippingAddress } from '../../interfaces';
+import { ICartProduct, IOrder, ShippingAddress } from '../../interfaces';
 
 import Cookie from 'js-cookie'
 import tesloApi from '../../api/tesloApi';
+import axios from 'axios';
 
 
 
@@ -159,17 +160,55 @@ export const CartProvider:FC<PropsWithChildren> = ({children}) => {
     return dispatch ({type: '[Cart] - Remove product in cart', payload: updatedCartProducts})
   }
  
-  const createOrder = async ()=>{
+  const createOrder = async ():Promise<{hasError: boolean; message: string}>=>{
+
+      if(!state.shippingAddress){
+       throw new Error('No hay dirección de entrega')
+      }
+
+    const body: IOrder = {
+      orderItems: state.cart.map(p => ({
+        ...p,
+        size: p.size!
+      })), 
+      shippingAddress: state.shippingAddress,  
+      numberOfItems: state.numberOfItems,
+      subTotal: state.subTotal,
+      iva: state.iva,
+      total: state.total,
+      isPaid: false
+    }  
+
    
     try {
       
-      const{ data } = await tesloApi.post('/orders')
+      const{ data } = await tesloApi.post('/orders', body)
 
       console.log({ data })
+
+      // TODO dispatch para borrar el state y vaciar el carrito, etc...
+
+      return {
+        hasError: false,
+        message: data._id
+      }
 
     } catch (error) {
 
       console.log(error);
+
+     if (axios.isAxiosError(error)){
+      const { message } = error.response?.data as { message : string}
+      return{
+        hasError: true,
+        message
+      }
+      
+     }
+      return {
+        hasError: true,
+        message: 'Error en el servidor, intente de nuevo'
+      }
       
     }
 

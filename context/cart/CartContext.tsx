@@ -20,7 +20,10 @@ interface contextProps{
     removeCartProduct: (product: ICartProduct) => void;
 
     // Orders
-    createOrder: () => Promise<void>;
+    createOrder: () => Promise<{
+        hasError: boolean;
+        message: string;
+    }>
 }
 
 

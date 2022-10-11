@@ -8,7 +8,7 @@ const orderSchema = new Schema({
    orderItems: [{
     _id         :{ type: Schema.Types.ObjectId, ref:'Product', required:true },
     title       :{ type: String, required:true },
-    Size        :{ type: String, required:true },
+    Size        :{ type: String},
     quantity    :{ type: Number, required:true },
     slug        :{ type: String, required:true },
     image       :{ type: String, required:true },
@@ -18,7 +18,7 @@ const orderSchema = new Schema({
     firstName   :{ type: String, required:true },
     lastName    :{ type: String, required:true },
     address     :{ type: String, required:true },
-    address2    :{ type: String, required:false },
+    address2    :{ type: String },
     zip         :{ type: String, required:true },
     city        :{ type: String, required:true },
     country     :{ type: String, required:true },
@@ -38,6 +38,6 @@ const orderSchema = new Schema({
 })
 
 
-const Order: Model<IOrder> = mongoose.models.User || model('Order', orderSchema);
+const Order: Model<IOrder> = mongoose.models.Order || model('Order', orderSchema);
 
 export default Order;
