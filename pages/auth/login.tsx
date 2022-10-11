@@ -43,7 +43,7 @@ const LoginPage = () => {
       })
 
    }, [])
-
+  
   /*  useEffect(() => {
       if (isLoggedIn) {
          router.replace(destination)
@@ -156,7 +156,7 @@ const LoginPage = () => {
                                  sx={{ mb: 1, display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}
                               >
                                  {provider.name}
-                                 <img style={{ width: '25px', }} src={`/${provider.name}.png`} alt='logo' />
+                                 <img style={{ width: '25px', }} src={`/${provider.id}.png`} alt='logo' />
                               </Button>
                            )
                         })

@@ -1,8 +1,8 @@
 
 
 
-import { ICartProduct } from '../../interfaces';
-import { CartState, ShippingAddress } from './CartProvider';
+import { ICartProduct, ShippingAddress } from '../../interfaces';
+import { CartState} from './CartProvider';
 
 
 
