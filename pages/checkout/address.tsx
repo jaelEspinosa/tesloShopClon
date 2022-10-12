@@ -1,8 +1,8 @@
 
 
-import { GetServerSideProps } from 'next'
+
 import { ShopLayout } from '../../components/layouts/ShopLayout';
-import { Box, Button, FormControl, Grid, MenuItem,  Select,  TextField, Typography } from '@mui/material';
+import { Box, Button, Grid, TextField, Typography } from '@mui/material';
 
 import { useForm } from 'react-hook-form';
 import Cookies from 'js-cookie';
@@ -29,41 +29,41 @@ type FormData = {
 
 
 const AddressPage = () => {
-    
+
     const router = useRouter()
-    const {UpdateAddress} = useContext(CartContext)
-    const {isLoggedIn} = useContext(AuthContext)
+    const { UpdateAddress } = useContext(CartContext)
+    const { isLoggedIn } = useContext(AuthContext)
 
 
-    const getAddressFromCoockies = (): FormData =>{
+    const getAddressFromCoockies = (): FormData => {
 
-        return{
+        return {
             firstName: Cookies.get('firstName') || '',
             lastName: Cookies.get('lastName') || '',
             address: Cookies.get('address') || '',
             address2: Cookies.get('address2') || '',
             zip: Cookies.get('zip') || '',
             city: Cookies.get('city') || '',
-            country:Cookies.get('country') || '',
+            country: Cookies.get('country') || '',
             phone: Cookies.get('phone') || ''
         }
 
     }
 
     const { register, handleSubmit, formState: { errors } } = useForm<FormData>({
-       defaultValues: getAddressFromCoockies()
+        defaultValues: getAddressFromCoockies()
 
     });
-    
-   
 
-    const onSubmitAddress = (data : FormData ) =>{
-       router.push ('/checkout/summary')
-       UpdateAddress(data)
+
+
+    const onSubmitAddress = (data: FormData) => {
+        router.push('/checkout/summary')
+        UpdateAddress(data)
 
     }
-    
-    
+
+
     return (
         <ShopLayout title={'Dirección'} pageDescription={'Confirmar dirección del Destino'}>
             <Typography variant='h1' component='h1'>Dirección</Typography>
@@ -71,125 +71,115 @@ const AddressPage = () => {
                 <Grid container spacing={2} sx={{ mt: 5 }}>
 
                     <Grid item xs={12} sm={6}>
-                        <TextField                               
-                               label='Nombre' 
-                               variant='filled' 
-                               fullWidth
-                               {...register('firstName', {
+                        <TextField
+                            label='Nombre'
+                            variant='filled'
+                            fullWidth
+                            {...register('firstName', {
                                 required: 'Este campo es requerido',
                                 minLength: { value: 2, message: 'Minimo 2 caracteres' }
-                             })}
-                             error={!!errors.firstName}
-                             helperText={errors.firstName?.message}
-                               />
+                            })}
+                            error={!!errors.firstName}
+                            helperText={errors.firstName?.message}
+                        />
                     </Grid><Grid item xs={12} sm={6}>
-                        <TextField 
-                                 label='Apellido' 
-                                 variant='filled' 
-                                 fullWidth 
-                                 {...register('lastName', {
-                                    required: 'Este campo es requerido',
-                                    minLength: { value: 2, message: 'Minimo 2 caracteres' }
-                                 })}
-                                 error={!!errors.lastName}
-                                 helperText={errors.lastName?.message}
-                                 
-                                 />
+                        <TextField
+                            label='Apellido'
+                            variant='filled'
+                            fullWidth
+                            {...register('lastName', {
+                                required: 'Este campo es requerido',
+                                minLength: { value: 2, message: 'Minimo 2 caracteres' }
+                            })}
+                            error={!!errors.lastName}
+                            helperText={errors.lastName?.message}
+
+                        />
                     </Grid>
 
                     <Grid item xs={12} sm={6}>
-                        <TextField 
-                                 label='Dirección' 
-                                 variant='filled' 
-                                 fullWidth 
-                                 {...register('address', {
-                                    required: 'Este campo es requerido',
-                                    })}
-                                 error={!!errors.address}
-                                 helperText={errors.address?.message}
-                                 />
+                        <TextField
+                            label='Dirección'
+                            variant='filled'
+                            fullWidth
+                            {...register('address', {
+                                required: 'Este campo es requerido',
+                            })}
+                            error={!!errors.address}
+                            helperText={errors.address?.message}
+                        />
                     </Grid><Grid item xs={12} sm={6}>
-                        <TextField 
-                                 label='Dirección 2(opcional)' 
-                                 variant='filled' 
-                                 fullWidth 
-                                 {...register('address2')}
-                                 />
-                    </Grid>              
+                        <TextField
+                            label='Dirección 2(opcional)'
+                            variant='filled'
+                            fullWidth
+                            {...register('address2')}
+                        />
+                    </Grid>
 
                     <Grid item xs={12} sm={6}>
-                        <TextField 
-                                label='Código postal' 
-                                variant='filled' 
-                                fullWidth
-                                {...register('zip', {
-                                    required: 'Este campo es requerido',
-                                    })}
-                                 error={!!errors.zip}
-                                 helperText={errors.zip?.message}
-                                 />
+                        <TextField
+                            label='Código postal'
+                            variant='filled'
+                            fullWidth
+                            {...register('zip', {
+                                required: 'Este campo es requerido',
+                            })}
+                            error={!!errors.zip}
+                            helperText={errors.zip?.message}
+                        />
                     </Grid><Grid item xs={12} sm={6}>
-                        <TextField 
-                                label='Ciudad' 
-                                variant='filled' 
-                                fullWidth
-                                {...register('city', {
-                                    required: 'Este campo es requerido',
-                                    })}
-                                 error={!!errors.city}
-                                 helperText={errors.city?.message}
-                                
-                                />
+                        <TextField
+                            label='Ciudad'
+                            variant='filled'
+                            fullWidth
+                            {...register('city', {
+                                required: 'Este campo es requerido',
+                            })}
+                            error={!!errors.city}
+                            helperText={errors.city?.message}
+
+                        />
                     </Grid>
 
 
                     <Grid item xs={12} sm={6}>
-                        {/* <FormControl fullWidth> */}
-                            <TextField                            
-                               // select
-                                variant='filled'
-                                label='Pais'
-                                fullWidth
-                                {...register('country', {
-                                    required: 'Este campo es requerido',
-                                    })}
-                                error={!!errors.country} 
-                                helperText={errors.city?.message}
-                                                                                  
-                                  >
-                                    {/* <MenuItem
-                                     value='España'
-                                    >España</MenuItem>
-                                  <MenuItem
-                                     value='Portugal'
-                                    >Portugal</MenuItem>
-                                     <MenuItem
-                                     value='Italia'
-                                    >Italia</MenuItem> */}
-                           
-                             
-                            </TextField>
-                        {/* </FormControl> */}
+
+                        <TextField
+
+                            variant='filled'
+                            label='Pais'
+                            fullWidth
+                            {...register('country', {
+                                required: 'Este campo es requerido',
+                            })}
+                            error={!!errors.country}
+                            helperText={errors.city?.message}
+
+                        >
+
+                        </TextField>
+
                     </Grid><Grid item xs={12} sm={6}>
-                        <TextField 
-                                label='Telefono' 
-                                variant='filled' 
-                                fullWidth
-                                {...register('phone', {
-                                    required: 'Este campo es requerido',
-                                    })}
-                                 error={!!errors.phone}
-                                 helperText={errors.phone?.message}
-                                />
+                        <TextField
+                            label='Telefono'
+                            variant='filled'
+                            fullWidth
+                            {...register('phone', {
+                                required: 'Este campo es requerido',
+                            })}
+                            error={!!errors.phone}
+                            helperText={errors.phone?.message}
+                        />
                     </Grid>
                 </Grid>
                 <Box display='flex' justifyContent='center' sx={{ mt: 5 }}>
-                <Button  type='submit' color='secondary' className='circular-btn' size='large'>
-                         Revisar Pedido
-                </Button>
-            </Box>
+                    <Button type='submit' color='secondary' className='circular-btn' size='large'>
+                        Revisar Pedido
+                    </Button>
+                </Box>
             </form>
-          
+
         </ShopLayout>
     )
 }

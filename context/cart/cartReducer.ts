@@ -14,6 +14,7 @@ type CartActionType =
  |{type:'[Cart] - Remove product in cart', payload: ICartProduct}
  |{type:'[Cart] - LoadAddress From cookies', payload: ShippingAddress}
  |{type:'[Cart] - Update Address', payload: ShippingAddress}
+ |{type:'[Cart] - Order complete'}
  |{type:'[Cart] - Update order summary', 
   payload:{
     numberOfItems: number, 
@@ -68,7 +69,16 @@ export const cartReducer = (state: CartState, action: any ):CartState =>{
               return {
                 ...state,
                 shippingAddress: action.payload
-              }     
+              } 
+            case '[Cart] - Order complete':
+              return{
+                ...state,
+               cart: [],
+               numberOfItems: 0,
+               subTotal: 0,
+               iva: 0,
+               total: 0,
+              }      
          default:
             return state;
        }

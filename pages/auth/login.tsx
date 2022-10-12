@@ -150,9 +150,9 @@ const LoginPage = () => {
                               <Button
                                  onClick={() => signIn(provider.id)}
                                  key={provider.id}
-                                 variant='outlined'
+                                 variant='contained'
                                  fullWidth
-                                 color='primary'
+                                 color='info'
                                  sx={{ mb: 1, display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}
                               >
                                  {provider.name}

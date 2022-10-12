@@ -1,20 +1,27 @@
 import { Divider, Grid, Typography } from '@mui/material';
-import { useContext, useState, useEffect } from 'react';
+import { useContext, useState, useEffect, FC } from 'react';
 import { CartContext } from '../../context/cart/CartContext';
 import { format } from '../../utilities';
+import { IOrder } from '../../interfaces/order';
+
+interface Props{
+      orderValues?:{
+        numberOfItems: number;
+        subTotal: number;
+        total: number;
+        iva: number
+      }
+}
 
 
-
-
-export const OrderSummary = () => {
+export const OrderSummary:FC<Props> = ({orderValues}) => {
     
-    const {cart, numberOfItems, subTotal, iva, total} = useContext(CartContext)
+    const { numberOfItems, subTotal, iva, total} = useContext(CartContext)
     
+    const summaryValues = orderValues ? orderValues : { numberOfItems, subTotal, iva, total}
+
     
-
-
-  
-
+ 
 
     return (
         <Grid container>
@@ -23,7 +30,8 @@ export const OrderSummary = () => {
             </Grid>
 
             <Grid item xs={6} display='flex' justifyContent='end'>
-                <Typography>{numberOfItems}{' '}{numberOfItems > 1 ? 'Productos': 'Producto'}</Typography>
+             <Typography>{summaryValues.numberOfItems}{' '}{summaryValues.numberOfItems > 1 ? 'Productos': 'Producto'}</Typography>
+               
             </Grid>
 
             <Grid item xs={6}>
@@ -31,7 +39,7 @@ export const OrderSummary = () => {
             </Grid>
 
             <Grid item xs={6} display='flex' justifyContent='end'>
-                <Typography>{format(subTotal)}</Typography>
+                <Typography>{format(summaryValues.subTotal)}</Typography>
             </Grid>
 
             <Grid item xs={6}>
@@ -39,7 +47,7 @@ export const OrderSummary = () => {
             </Grid>
 
             <Grid item xs={6} display='flex' justifyContent='end'>
-                <Typography>{format(iva)}</Typography>
+                <Typography>{format(summaryValues.iva)}</Typography>
             </Grid>
 
             <Divider />
@@ -49,7 +57,7 @@ export const OrderSummary = () => {
             </Grid>
 
             <Grid item xs={6} sx={{ mt: 2 }} display='flex' justifyContent='end'>
-                <Typography variant='subtitle1'>{format(total)}</Typography>
+                <Typography variant='subtitle1'>{format(summaryValues.total)}</Typography>
             </Grid>
 
 

@@ -15,6 +15,7 @@ import axios from 'axios';
 
 
 
+
 export interface CartState {
    isLoaded: boolean;
    cart: ICartProduct[];
@@ -183,10 +184,10 @@ export const CartProvider:FC<PropsWithChildren> = ({children}) => {
     try {
       
       const{ data } = await tesloApi.post('/orders', body)
+      Cookie.remove('cart')
+      dispatch({type: '[Cart] - Order complete'})
 
-      console.log({ data })
-
-      // TODO dispatch para borrar el state y vaciar el carrito, etc...
+      
 
       return {
         hasError: false,

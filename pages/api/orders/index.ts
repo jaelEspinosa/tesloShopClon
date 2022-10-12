@@ -51,7 +51,7 @@ export default function handler (req: NextApiRequest, res: NextApiResponse<Data>
     
 
     try {
-      console.log('los productos encontrados son',dbProducts)
+      
 
       const subTotal = orderItems.reduce( (prev, current) => {
         const currentPrice = dbProducts.find (prod => prod.id === current._id)?.price

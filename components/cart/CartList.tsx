@@ -10,20 +10,22 @@ import { Grid, Link, Typography, CardActionArea, CardMedia, Box, Button } from '
 import DeleteOutlineOutlinedIcon from '@mui/icons-material/DeleteOutlineOutlined';
 
 import { CartContext } from '../../context';
-import { ICartProduct } from '../../interfaces';
+import { ICartProduct, IOrderItem } from '../../interfaces';
 import { ItemCounter } from '../ui';
 
 
+
 interface Props {
+    products? : IOrderItem[];
     editable?: boolean;
 }
 
-export const CartList:FC<Props> = ({editable = false}) => {
-    
-    
 
-    const {cart, uptateCartQuantity, removeCartProduct, numberOfItems} = useContext(CartContext)
+
+export const CartList:FC<Props> = ({editable = false, products }) => {
     
+    const {cart, uptateCartQuantity, removeCartProduct, numberOfItems} = useContext(CartContext)
+       
     
     
     const onNewCartQuantityValue = (product: ICartProduct, newQuantityValue: number)=>{
@@ -34,12 +36,14 @@ export const CartList:FC<Props> = ({editable = false}) => {
         removeCartProduct(product)
        
     }
+
+    const productsToShow = products ? products : cart
    
     return (
         <>
             
             {
-                cart.map(product => (
+                productsToShow.map(product => (
                     
                     <Grid container spacing={2} key={product.slug+product.size} sx={{ mb: 2 }}>
                         <Grid item xs={3}>
@@ -62,10 +66,10 @@ export const CartList:FC<Props> = ({editable = false}) => {
                                 <Typography variant='body1'>{product.title}</Typography>
                                 <Typography variant='body1'>Talla: <strong>{product.size}</strong></Typography>
                             {
-                                editable ? <ItemCounter
+                                editable  ? <ItemCounter
                                               currentValue={product.quantity} 
                                               maxValue={5} 
-                                              updatedQuantity={(value) => onNewCartQuantityValue(product, value)}
+                                              updatedQuantity={(value) => onNewCartQuantityValue(product as ICartProduct, value)}
                                               /> :
                                 <Typography variant='subtitle1'>{product.quantity}{product.quantity > 1 ? ' Productos' : ' Producto'}</Typography>
 
@@ -80,7 +84,7 @@ export const CartList:FC<Props> = ({editable = false}) => {
                             <Button
                                 variant='text'
                                 color='primary'
-                                onClick={()=>deleteItem(product)}
+                                onClick={()=>deleteItem(product as ICartProduct)}
                             >
                              <DeleteOutlineOutlinedIcon />   
 
