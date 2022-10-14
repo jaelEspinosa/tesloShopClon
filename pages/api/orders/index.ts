@@ -72,9 +72,11 @@ export default function handler (req: NextApiRequest, res: NextApiResponse<Data>
 
     const userId = session.user._id;
     const newOrder = new Order({...req.body, isPaid: false, user: userId })
-    
+    newOrder.total = Math.round (newOrder.total * 100 ) / 100; // redondeamos el total a dos decimales
+
     await newOrder.save()
     await db.disconnect()
+    
     return res.status(201).json( newOrder )
     
       

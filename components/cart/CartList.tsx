@@ -43,9 +43,9 @@ export const CartList:FC<Props> = ({editable = false, products }) => {
         <>
             
             {
-                productsToShow.map(product => (
+                productsToShow.map((product, index) => (
                     
-                    <Grid container spacing={2} key={product.slug+product.size} sx={{ mb: 2 }}>
+                    <Grid container spacing={2} key={product.slug+product.size+index} sx={{ mb: 2 }}>
                         <Grid item xs={3}>
                           
                             <NextLink href={`/product/${product.slug}`} passHref>

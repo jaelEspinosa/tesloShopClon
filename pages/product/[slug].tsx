@@ -1,5 +1,5 @@
 import { useState, useContext } from 'react';
-import {  NextPage, GetStaticProps, GetStaticPaths } from 'next'
+import { NextPage, GetStaticProps, GetStaticPaths } from 'next'
 import { useRouter } from 'next/router';
 
 import { Box, Button, Chip, Grid, Typography } from '@mui/material';
@@ -25,10 +25,10 @@ interface Props {
 }
 
 
-const ProductPage:NextPage<Props> = ({product}) => {
+const ProductPage: NextPage<Props> = ({ product }) => {
 
- const [ tempCartProduct, setTemCartProduct ] = useState<ICartProduct>({
-    _id:product._id,
+  const [tempCartProduct, setTemCartProduct] = useState<ICartProduct>({
+    _id: product._id,
     image: product.images[0],
     price: product.price,
     size: undefined,
@@ -38,146 +38,132 @@ const ProductPage:NextPage<Props> = ({product}) => {
     quantity: 1
 
 
- })
+  })
+
+  const [addedToCart, setAddedToCart] = useState(false)
+
   const router = useRouter()
-  const {addProductToCart} = useContext(CartContext)
-  
-  const selectedSize = (size : ISize ) =>{
+  const { addProductToCart } = useContext(CartContext)
+
+  const selectedSize = (size: ISize) => {
     setTemCartProduct({
       ...tempCartProduct,
       size
     })
-  }  
-  
-  const onUpdatedQuantity = (quantity : number ) =>{
+  }
+
+  const onUpdatedQuantity = (quantity: number) => {
     setTemCartProduct({
       ...tempCartProduct,
       quantity
     })
   }
 
- const onAddProduct = ()=>{
-  if(!tempCartProduct.size) {return;}
-  
-  
-  //TODO: llamar a la accion del contex para agregar al carrio
-  
-  addProductToCart(tempCartProduct)
-  router.push('/cart')
+  const onAddProduct = () => {
+    if (!tempCartProduct.size) { return; }
+
+    addProductToCart(tempCartProduct)
+    setAddedToCart(true)
+    
+  }
+
+ const navigateTo =  (url:string )=>{
+    
+    router.push(url)
  }
- 
- 
-  
+
   return (
     <ShopLayout title={product.title} pageDescription={product.description}>
-    
-    <Grid container spacing={3}>
-    <Grid item xs={ 12 } sm={ 7 }>
 
-     <ProductSlideshow images={product.images} />
-    </Grid>
-    <Grid item xs = {12} sm= {5}>
-      <Box display='flex' flexDirection='column'>
+      <Grid container spacing={3}>
+        <Grid item xs={12} sm={7}>
 
-        {/* titulos */}
-       <Typography variant='h1' component='h1'>{product.title}</Typography>
-       <Typography variant='subtitle1' component='h2'>{product.price} €</Typography>
-
-       {/* Cantidad */}
-       <Box sx={{my: 2 }}>
-       <Typography variant='subtitle2' component='h2'>Cantidad</Typography>
-        <ItemCounter
-            currentValue = {tempCartProduct.quantity}
-            maxValue = {product.inStock > 5 ? 5 : product.inStock}
-            updatedQuantity = {onUpdatedQuantity} 
-          />
+          <ProductSlideshow images={product.images} />
+        </Grid>
+        <Grid item xs={12} sm={5}>
+          <Box display='flex' flexDirection='column'>
 
 
-        <SizeSelector  
-                sizes={product.sizes} 
-                selectedSize = {tempCartProduct.size} 
-                onSelectedSize={selectedSize} 
-            />  
-       </Box>
-       {/* Agregar al Carrito */}
-       {
-      product.inStock > 0 ?(
-          <Button 
-               color='secondary' 
-               className='circular-btn'
-               onClick={onAddProduct}               
-               disabled = {!tempCartProduct.size}
-               >
-          
+            <Typography variant='h1' component='h1'>{product.title}</Typography>
+            <Typography variant='subtitle1' component='h2'>{product.price} €</Typography>
+
+            {/* Cantidad */}
+            <Box sx={{ my: 2 }}>
+              <Typography variant='subtitle2' component='h2'>Cantidad</Typography>
+              <ItemCounter
+                currentValue={tempCartProduct.quantity}
+                maxValue={product.inStock > 5 ? 5 : product.inStock}
+                updatedQuantity={onUpdatedQuantity}
+              />
+
+
+              <SizeSelector
+                sizes={product.sizes}
+                selectedSize={tempCartProduct.size}
+                onSelectedSize={selectedSize}
+              />
+            </Box>
+            {/* Agregar al Carrito */}
             {
-              tempCartProduct.size
-             ?'Agregar a la cesta ' 
-             :'Selecione una talla' 
+              product.inStock > 0 && !addedToCart  ? (
+                <Button
+                  color='secondary'
+                  className='circular-btn'
+                  onClick={onAddProduct}
+                  disabled={!tempCartProduct.size}
+                >
+
+                  {
+                    tempCartProduct.size
+                      ? 'Agregar a la cesta '
+                      : 'Selecione una talla'
+                  }
+
+                </Button>
+              ) : (
+               product.inStock < 1  ? <Chip label='No hay Stock suficiente' color='error' variant='outlined' className='fadeIn' /> :
+               addedToCart ? <Chip label='Agregado al Carrito' color='success' variant='outlined' className='fadeIn' /> : null
+              )
             }
 
-            </Button>
-        ):(
-          <Chip label = 'No hay Stock suficiente' color = 'error' variant = 'outlined'/>
-        )
-       }
+            <Box sx={{ mt: 3 }}>
+              <Typography variant='subtitle2'>Descripción</Typography>
+              <Typography variant='body2'>{product.description}</Typography>
+            </Box>
 
-       {/* <Chip label='No hay Stock suficiente' color='error' variant='outlined'/> */}
+          </Box>
 
-       {/* Descripcion */}
-      <Box sx={{ mt:3 }}>
-        <Typography variant='subtitle2'>Descripción</Typography>
-        <Typography variant='body2'>{product.description}</Typography>
-        </Box>
+          <Box display={addedToCart ? 'flex': 'none'} justifyContent='space-around' sx={{mt:'50px'}} className='fadeIn'>
+            <Button
+              color='secondary'
+              className='circular-btn'
+              onClick={()=>navigateTo('/')}
+            >Seguir Comprando</Button>
+            <Button
+              color='secondary'
+              className='circular-btn'
+              onClick={()=>navigateTo('/cart')}
+            >Ir al Carrito</Button>
+          </Box>
+        </Grid>
 
-      </Box>
-    </Grid>
+      </Grid>
 
-    </Grid>
-   
 
 
     </ShopLayout>
   )
 }
 
-// You should use getServerSideProps when:
-// - Only if you need to pre-render a page whose data must be fetched at request time
-
-
-/* export const getServerSideProps: GetServerSideProps = async ({params}) => {
- 
-  const { slug } = params as {slug: string}
-
-  const product = await dbProducts.getProductBySlug(slug)
-
-  if(!product){
-    return{
-        redirect:{
-        destination: '/',
-        permanent: false
-      }
-    }
-  }
-
-
-  return {
-    props: {
-      product
-    }
-  }
-} */
-
-// You should use getStaticPaths if you’re statically pre-rendering pages that use dynamic routes
-
 
 export const getStaticPaths: GetStaticPaths = async (ctx) => {
 
-  const  productSlugs  = await dbProducts.getAllProductsSlugs()   
+  const productSlugs = await dbProducts.getAllProductsSlugs()
 
 
   return {
-    paths: productSlugs.map(obj =>({
-      params:{
+    paths: productSlugs.map(obj => ({
+      params: {
         slug: obj.slug
       }
     })),
@@ -187,25 +173,24 @@ export const getStaticPaths: GetStaticPaths = async (ctx) => {
 
 
 
-
-export const getStaticProps: GetStaticProps = async ({params}) => {
-  const { slug = '' } = params as {slug: string}
+export const getStaticProps: GetStaticProps = async ({ params }) => {
+  const { slug = '' } = params as { slug: string }
 
   const product = await dbProducts.getProductBySlug(slug)
 
-if (!product){
-  return{
-    redirect:{
-      destination:'/404',
-      permanent:false
+  if (!product) {
+    return {
+      redirect: {
+        destination: '/404',
+        permanent: false
+      }
     }
   }
-}
   return {
     props: {
       product
     },
-    revalidate:86400,
+    revalidate: 86400,
   }
 }
 
