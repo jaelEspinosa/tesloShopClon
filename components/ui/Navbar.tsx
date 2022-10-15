@@ -1,5 +1,5 @@
 /* eslint-disable @next/next/no-img-element */
-import { useSession } from 'next-auth/react';
+
 import React, { useContext, useState } from 'react'
 import NextLink from 'next/link'
 import { useRouter } from 'next/router';

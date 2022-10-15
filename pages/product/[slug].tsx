@@ -122,7 +122,7 @@ const ProductPage: NextPage<Props> = ({ product }) => {
                 </Button>
               ) : (
                product.inStock < 1  ? <Chip label='No hay Stock suficiente' color='error' variant='outlined' className='fadeIn' /> :
-               addedToCart ? <Chip label='Agregado al Carrito' color='success' variant='outlined' className='fadeIn' /> : null
+               addedToCart ? <Chip label='AGREGADO A SU COMPRA' color='success' variant='outlined' className='fadeIn' /> : null
               )
             }
 

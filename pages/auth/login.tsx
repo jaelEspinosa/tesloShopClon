@@ -43,22 +43,11 @@ const LoginPage = () => {
       })
 
    }, [])
-  
-  /*  useEffect(() => {
-      if (isLoggedIn) {
-         router.replace(destination)
-      }
 
-   }, [destination, isLoggedIn, router]) */
 
    const onLoginUser = async ({ email, password }: FormData) => {
-      /*    const isValidLogin = await loginUser( email, password )
-         if ( !isValidLogin){
-            setErrorLogin(true)
-            setTimeout(() => { setErrorLogin(false) }, 2000);
-            return
-         }      
-         router.replace(destination) */
+    
+         email= email.toLowerCase()
       await signIn('credentials', { email, password })
    }
    useEffect(() => {

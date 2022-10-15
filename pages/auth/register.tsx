@@ -36,7 +36,7 @@ const RegisterPage = () => {
 
    const onRegisterUser = async ({name, email, password }: FormData) => {      
       
-         const {hasError, message} = await registerUser( name, email, password)
+         const {hasError, message} = await registerUser( name, email.toLowerCase(), password)
          
       if(hasError){
          setErrorRegister(true);
@@ -45,8 +45,7 @@ const RegisterPage = () => {
          return
       }else{
          setErrorRegister(false)
-         /* setErrorRegisterMessage('Iniciando sesión..')
-         setTimeout(() => { router.replace(destination) }, 1000); */
+         email=email.toLowerCase()  
          await signIn('credentials',{email, password })
          
       }
