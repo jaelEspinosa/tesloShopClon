@@ -1,12 +1,12 @@
 
-
 import { Box, CircularProgress, Typography } from '@mui/material'
 import React from 'react'
-import { ShopLayout } from '../layouts'
 
-export const FullScreenLoading = () => {
+import { AdminLayout } from '../layouts';
+
+export const FullScreenLoadingDashboard = () => {
   return (
-    <ShopLayout title='cargando' pageDescription='Nada que mostrar' > 
+    <AdminLayout title='cargando' subTitle={''} > 
     <Box              
          display='flex' 
          justifyContent='center' 
@@ -20,7 +20,6 @@ export const FullScreenLoading = () => {
       /> 
     </Box>
 
- </ShopLayout>
+ </AdminLayout>
   )
 }
-

@@ -19,24 +19,33 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
 
     try {
         await db.connect()
-        const orders =  await Order.find()
-        const users = await User.find()
-        const products = await Product.find()
-        const paidOrders = orders.filter(order => order.isPaid === true )
-    
-        const numberOfClients = users.filter(user => user.role === 'client')
-        const notPaidOrders = orders.filter(order => order.isPaid === false )
+      
         
-        const productsWithNoInvertory = products.filter(product => product.inStock === 0)
-        const lowInventory = products.filter (product => product.inStock < 10)
+    const [
+        numberOfOrders,
+        paidOrders,
+        numberOfClients,
+        numberOfProducts,
+        productsWithNoInvertory,
+        lowInventory,
+    ] = await Promise.all([
+            await Order.count(),              
+            await Order.find({isPaid:true}).count(),
+            await User.find({role:'client'}).count(),
+            await Product.count(),
+            await Product.find({inStock:0}).count(),
+            await Product.find({ inStock: { $lte: 10 } }).count(),
+    ]) 
+        
         res.status(200).json({ 
-            numberOfOrders: orders.length,
-            paidOrders: paidOrders.length,
-            numberOfClients:numberOfClients.length,
-            notPaidOrders: notPaidOrders.length,
-            numberOfProducts: products.length,
-            productsWithNoInvertory: productsWithNoInvertory.length,
-            lowInventory: lowInventory.length
+
+            numberOfOrders,
+            paidOrders,
+            numberOfClients,
+            numberOfProducts,
+            productsWithNoInvertory,
+            lowInventory,
+            notPaidOrders: numberOfOrders - paidOrders,
     
         })
     } catch (error) {
