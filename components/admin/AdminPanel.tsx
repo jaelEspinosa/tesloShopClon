@@ -20,26 +20,36 @@ const navigateTo = (url:string)=>{
     <Divider />
     <ListSubheader>Admin Panel</ListSubheader>
 
-    <ListItem button onClick={()=>navigateTo('/admin')}>
+    <ListItem 
+            button 
+            onClick={()=>navigateTo('/admin')}
+            >
         <ListItemIcon>
             <DashboardOutlinedIcon />
         </ListItemIcon>
         <ListItemText primary={'DashBoard'} />
     </ListItem>
+
     <ListItem button>
         <ListItemIcon>
             <CategoryOutlined />
         </ListItemIcon>
         <ListItemText primary={'Productos'} />
     </ListItem>
-    <ListItem button>
+
+    <ListItem 
+            button
+            onClick={()=>navigateTo('/admin/orders')}
+            >
         <ListItemIcon>
             <ConfirmationNumberOutlined />
         </ListItemIcon>
         <ListItemText primary={'Ordenes'} />
     </ListItem>
 
-    <ListItem button>
+    <ListItem 
+            button 
+            onClick={()=>navigateTo('/admin/users')}>
         <ListItemIcon>
             <AdminPanelSettings />
         </ListItemIcon>

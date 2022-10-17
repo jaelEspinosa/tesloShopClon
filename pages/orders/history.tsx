@@ -104,10 +104,10 @@ export const getServerSideProps: GetServerSideProps = async ({req}) => {
     
     /* const ordersToShow = orders?.filter(order => order.user === session.user._id) */
 
-    if(!orders) {
+    if(orders?.length === 0) {
         return {
             redirect:{
-                destination: '/cart/historyEmpty',
+                destination: '/orders/historyEmpty',
                 permanent:false
             }
         }

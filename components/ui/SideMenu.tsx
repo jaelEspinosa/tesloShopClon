@@ -6,7 +6,7 @@ import { useContext, useState } from 'react';
 import { AuthContext, UiContext } from "../../context";
 import { useRouter } from "next/router";
 
-import AdminPanel from "./AdminPanel";
+import AdminPanel from "../admin/AdminPanel";
 
 export const SideMenu = () => {
 
