@@ -6,10 +6,10 @@ import { DataGrid, GridColDef, GridRenderCellParams, GridValueGetterParams } fro
 import { Grid, MenuItem, Select } from '@mui/material';
 import { PeopleOutline } from '@mui/icons-material'
 
-import { tesloApi } from '../../api';
-import { AdminLayout } from '../../components/layouts'
-import { FullScreenLoadingDashboard } from '../../components/ui/FullScreenLoadingDashboard';
-import { IUser } from '../../interfaces';
+import { tesloApi } from '../../../api';
+import { AdminLayout } from '../../../components/layouts'
+import { FullScreenLoadingDashboard } from '../../../components/ui/FullScreenLoadingDashboard';
+import { IUser } from '../../../interfaces';
 
 
 const UsersPage = () => {
