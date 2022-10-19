@@ -2,8 +2,8 @@
 
 import React from 'react'
 
-import { CategoryOutlined } from '@mui/icons-material';
-import { Grid, CardMedia, Link } from '@mui/material';
+import { AddOutlined, CategoryOutlined } from '@mui/icons-material';
+import { Grid, CardMedia, Link, Box, Button } from '@mui/material';
 import { DataGrid, GridColDef, GridRenderCellParams } from '@mui/x-data-grid';
 
 import useSWR from 'swr';
@@ -25,8 +25,8 @@ const columns : GridColDef[]=[
                    <CardMedia
                       component = 'img'
                       className = 'fadeIn'
-                      image={`/products/${row.img}`}
-                      alt={row.title}
+                      image={ row.img }
+                      alt={ row.title }
                    />
 
                 </a>
@@ -79,7 +79,18 @@ const ProductsPage = () => {
         <AdminLayout
             title={`Productos (${data?.length})`}
             subTitle={'Mantenimiento de productos'}
-            icon={<CategoryOutlined />}>
+            icon={<CategoryOutlined />}
+            >
+
+        <Box display='flex' justifyContent='end' sx={{mb:2}} >
+            <Button
+            startIcon={<AddOutlined />}
+            color='secondary'
+            href='/admin/products/new'    
+            >
+             Nuevo Producto
+            </Button>
+            </Box>        
         <Grid container className='fadeIn'>
                 <Grid item xs={12} sx={{ height: 650, width: '100%' }}>
                    <DataGrid

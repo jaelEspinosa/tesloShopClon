@@ -4,7 +4,7 @@ import mongoose, {Schema, model, Model} from 'mongoose'
 import { IProduct } from '../interfaces/products';
 
 const productSchema = new Schema ({
-    description: {type: String, required:true},
+    description: {type: String, required:true, default:''},
     images:[{type: String}],
     inStock: {type: Number, required:true, default: 0},
     price: {type: Number, required :true, default: 0},
@@ -19,14 +19,16 @@ const productSchema = new Schema ({
     }],
     slug:{type: String, required: true, unique: true},
     tags:[{type: String}],
-    title:{type: String, required: true, },
+    title:{type: String, required: true, default:''},
     type:{type: String,
         enum:{
             values:['shirts','pants','hoodies','hats'],
             message:'{VALUE} No existe este tipo...'
 
         },
-        required: true, },
+        required: true,
+        default:'shirst'
+    },
 
     gender:{type: String,
         enum:{
@@ -34,7 +36,9 @@ const productSchema = new Schema ({
             message:'{VALUE} No es un género válido...'
 
         },
-        required: true, },
+        required: true,
+        default:'woman',
+    },
 
 },{
     timestamps: true

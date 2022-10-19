@@ -16,7 +16,11 @@ export const getProductBySlug = async (slug : string): Promise<IProduct | null> 
     return null;
    }
 
-   //TODO: // procesamiento de imagenes cuando las subamos al server
+   
+   product.images = product.images.map( image => {
+    return image.includes('http') ? image : `${process.env.HOST_NAME}products/${ image }`
+ });
+
    
 return JSON.parse(JSON.stringify( product ) );
 
@@ -50,7 +54,15 @@ export const getProductsByTerm = async (term: string):Promise<IProduct[]> =>{
 
    await db.disconnect()
 
-   return products     // aqui no hace falta parsear porque omitimos el Id y sólo traemos los campos title images... pero no los 
+   const updatedProducts = products.map( product =>{
+      product.images = product.images.map( image => {
+        return image.includes('http') ? image : `${process.env.HOST_NAME}products/${ image }`
+    });
+       return product
+   })
+
+
+   return updatedProducts     // aqui no hace falta parsear porque omitimos el Id y sólo traemos los campos title images... pero no los 
                        // que pueden dar problema
 }
 
@@ -63,8 +75,14 @@ export const getAllProducts = async ():Promise<IProduct[]> =>{
     .lean();
 
   await db.disconnect()
+  const updatedProducts = products.map( product =>{
+    product.images = product.images.map( image => {
+      return image.includes('http') ? image : `${process.env.HOST_NAME}products/${ image }`
+  });
+     return product
+ })
 
-  return JSON.parse(JSON.stringify( products ) ); // esto es para parsear a Json porque si no da error en el _id, createdAt y updatedAt por 
+  return JSON.parse(JSON.stringify(updatedProducts  ) ); // esto es para parsear a Json porque si no da error en el _id, createdAt y updatedAt por 
                                                   // el formato de mongo
 
 }

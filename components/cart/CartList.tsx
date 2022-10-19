@@ -52,7 +52,7 @@ export const CartList:FC<Props> = ({editable = false, products }) => {
                                 <Link>
                                     <CardActionArea sx={{ borderRadius: 8 }}>
                                         <CardMedia
-                                            image={`/products/${product.image}`}
+                                            image={product.image}
                                             component='img'
                                             sx={{ borderRadius: 8 }}
                                         />

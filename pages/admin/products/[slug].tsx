@@ -1,4 +1,5 @@
-import React, { FC, useEffect, useState } from 'react'
+import React, { ChangeEvent, FC, useEffect, useRef, useState } from 'react'
+import { useRouter } from 'next/router';
 import { useForm, Controller } from 'react-hook-form';
 
 import { GetServerSideProps } from 'next'
@@ -8,6 +9,7 @@ import { DriveFileRenameOutline, Iron, SaveOutlined, TagSharp, TroubleshootRound
 import { dbProducts } from '../../../database';
 import { Box, Button, capitalize, Card, CardActions, CardMedia, Checkbox, Chip, Divider, FormControl, FormControlLabel, FormGroup, FormLabel, Grid, ListItem, Paper, Radio, RadioGroup, TextField } from '@mui/material';
 import { tesloApi } from '../../../api';
+import { Product } from '../../../models';
 
 
 
@@ -39,6 +41,8 @@ interface Props {
 
 const ProductAdminPage: FC<Props> = ({ product }) => {
     
+    const router = useRouter()
+    const fileInputRef = useRef<HTMLInputElement>(null)
     const [newTagValue, setNewTagValue] = useState('')
     const [isSubmiting, setIsSubmiting] = useState(false)
     const { control, register, handleSubmit, formState: { errors }, getValues, setValue, watch} = useForm<FormData>({
@@ -92,6 +96,37 @@ const ProductAdminPage: FC<Props> = ({ product }) => {
         
     }
 
+    const onFilesSelected = async ({target}:ChangeEvent<HTMLInputElement>)=>{
+        console.log('subiendo...') 
+        if ( !target.files || target.files.length === 0) {
+            return;
+         }
+         console.log(target.files)
+         
+         try {
+             for( const file of target.files){
+                const formData = new FormData();
+                formData.append('file', file);
+                console.log('haciendo post de ', formData)
+                const {data}= await tesloApi.post<{message:string}>('/admin/upload', formData)
+                console.log('El resultado es....', data.message)
+                setValue('images', [...getValues('images'), data.message],{shouldValidate:true})
+            }
+            
+         } catch (error) {
+            console.log(error)
+         }
+    }
+
+    const onDeleteImage = (image:string) =>{
+        
+         setValue('images', getValues('images').filter(img => img !== image), {shouldValidate: true} )
+
+        
+
+    }
+
+
     const onSubmit = async (form: FormData) => {
         setIsSubmiting(true)
       
@@ -101,12 +136,12 @@ const ProductAdminPage: FC<Props> = ({ product }) => {
      try {
         const {data} = await tesloApi({
             url: '/admin/products',
-            method: 'PUT',
+            method: form._id ? 'PUT' : 'POST',
             data: form
         })
        console.log('la respuesta es ', data)
        if(!form._id){
-        //TODO: recargar el navegador
+        router.replace(`/admin/products/${ form.slug}`)
        } else {
         setIsSubmiting(false)
        }
@@ -319,29 +354,43 @@ const ProductAdminPage: FC<Props> = ({ product }) => {
                                 fullWidth
                                 startIcon={<UploadOutlined />}
                                 sx={{ mb: 3 }}
+                                onClick={()=> fileInputRef.current?.click() } // llamamos al click del input con la ref 'fileInputRef'
                             >
                                 Cargar imagen
                             </Button>
+                            <input 
+                                ref={fileInputRef}
+                                type="file" 
+                                multiple
+                                accept='image/png , image/gif, image/jpeg'
+                                style={{display:'none'}}
+                                onChange={ onFilesSelected }
+                                />
 
                             <Chip
                                 label="Es necesario al 2 imagenes"
                                 color='error'
                                 variant='outlined'
+                                sx={{display: getValues('images').length >= 2 ? 'none' : 'flex', mb: 2}}
                             />
 
                             <Grid container spacing={2}>
                                 {
-                                    product.images.map(img => (
+                                    getValues('images').map(img => (
                                         <Grid item xs={4} sm={3} key={img}>
                                             <Card>
                                                 <CardMedia
                                                     component='img'
                                                     className='fadeIn'
-                                                    image={`/products/${img}`}
+                                                    image={img}
                                                     alt={img}
                                                 />
                                                 <CardActions>
-                                                    <Button fullWidth color="error">
+                                                    <Button 
+                                                        fullWidth 
+                                                        color="error"
+                                                        onClick={()=>{onDeleteImage(img)}}
+                                                        >
                                                         Borrar
                                                     </Button>
                                                 </CardActions>
@@ -369,7 +418,19 @@ export const getServerSideProps: GetServerSideProps = async ({ query }) => {
 
     const { slug = '' } = query;
 
-    const product = await dbProducts.getProductBySlug(slug.toString());
+    let product: IProduct | null
+
+    if (slug === 'new') {
+        //crear un producto
+        const tempProduct= JSON.parse( JSON.stringify( new Product()));
+        delete tempProduct._id;
+        tempProduct.images= ['img1.jpg','img2.jpg'];
+        product = tempProduct
+    }else{
+
+        product = await dbProducts.getProductBySlug(slug.toString());
+    }
+
 
     if (!product) {
         return {
