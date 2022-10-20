@@ -29,7 +29,7 @@ export default function handler (req: NextApiRequest, res: NextApiResponse<Data>
 
         default:
             res.status(400).json({
-                message:'Bad request'
+                message:'Bad request.'
             })
         }
         
