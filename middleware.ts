@@ -45,5 +45,5 @@ export async function middleware( req: NextRequest | any, ev: NextFetchEvent ) {
 }
 
 export const config = {
-    matcher:['/checkout/:path*', '/api/admin/:path*', '/admin/:path*']
+    matcher:['/checkout/:path*', '/admin/:path*', '/((?!api\/)/admin/:path.*)']
 }
