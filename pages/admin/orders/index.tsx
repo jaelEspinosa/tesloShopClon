@@ -59,7 +59,7 @@ const OrdersPage = () => {
     const { data, error } = useSWR<IOrder[]> ('/api/admin/orders')
 
     if( !data && !error ) {return <FullScreenLoadingDashboard/>}
-        
+       
     const rows = data!.map(order =>({
         
         id: order._id,
