@@ -17,6 +17,8 @@ import { IOrder } from '../../interfaces';
 const columns : GridColDef[]=[
     { field : 'id', headerName : 'ID', width: 100},
     { field : 'fullName', headerName : 'Nombre Completo', width: 300},
+    { field : 'creada', headerName : 'Creada', width: 150},
+    { field : 'numberOfItems', headerName : 'Nº de productos', width: 150},
     {
         field: 'paid',
         headerName: 'Pagada',
@@ -60,6 +62,8 @@ const HistoryPage: NextPage<Props> = ({orders}) => {
         id: index+1, 
         paid: order.isPaid, 
         fullName: `${(order.shippingAddress.firstName).toLocaleUpperCase()} ${(order.shippingAddress.lastName.toLocaleUpperCase())}`,
+        creada: order.createdAt!.slice(0,10),   //TODO comprobar que fufa
+        numberOfItems: order.numberOfItems,
         lk: order._id 
     }))
  
