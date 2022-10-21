@@ -6,7 +6,7 @@ import { PropsWithChildren } from 'react';
 import { ICartProduct, IOrder, ShippingAddress } from '../../interfaces';
 
 import Cookie from 'js-cookie'
-import tesloApi from '../../api/tesloApi';
+import tesloApi from '../../apiaxios/tesloApi';
 import axios from 'axios';
 
 

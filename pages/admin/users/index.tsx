@@ -6,7 +6,7 @@ import { DataGrid, GridColDef, GridRenderCellParams, GridValueGetterParams } fro
 import { Grid, MenuItem, Select } from '@mui/material';
 import { PeopleOutline } from '@mui/icons-material'
 
-import { tesloApi } from '../../../api';
+import { tesloApi } from '../../../apiaxios';
 import { AdminLayout } from '../../../components/layouts'
 import { FullScreenLoadingDashboard } from '../../../components/ui/FullScreenLoadingDashboard';
 import { IUser } from '../../../interfaces';

@@ -10,7 +10,7 @@ import { AuthContext } from './AuthContext';
 import { authReducer } from './authReducer';
 
 import { IUser } from '../../interfaces';
-import { tesloApi } from '../../api';
+import { tesloApi } from '../../apiaxios';
 import { useRouter } from 'next/router';
 
 

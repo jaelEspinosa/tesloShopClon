@@ -15,7 +15,7 @@ import { getSession } from 'next-auth/react';
 import { dbOrders } from '../../database';
 import { IOrder } from '../../interfaces';
 import { PayPalButtons } from '@paypal/react-paypal-js';
-import { tesloApi } from '../../api';
+import { tesloApi } from '../../apiaxios';
 import axios from 'axios';
 
 export type OrderResponseBody = {

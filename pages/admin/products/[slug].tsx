@@ -8,7 +8,7 @@ import { IProduct, IType } from '../../../interfaces';
 import { DriveFileRenameOutline, Iron, SaveOutlined, TagSharp, TroubleshootRounded, UploadOutlined } from '@mui/icons-material';
 import { dbProducts } from '../../../database';
 import { Box, Button, capitalize, Card, CardActions, CardMedia, Checkbox, Chip, Divider, FormControl, FormControlLabel, FormGroup, FormLabel, Grid, ListItem, Paper, Radio, RadioGroup, TextField } from '@mui/material';
-import { tesloApi } from '../../../api';
+import { tesloApi } from '../../../apiaxios';
 import { Product } from '../../../models';
 
 
