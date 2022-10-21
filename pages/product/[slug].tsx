@@ -190,7 +190,7 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
     props: {
       product
     },
-    revalidate: 1500,
+    revalidate: 800,
   }
 }
 
